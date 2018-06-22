@@ -12,7 +12,7 @@ class DB(object):
     def HandleMsg(self,msg):
         self.__curs.execute('''
             insert into cht values ({0}, '{1}');
-        '''.format(msg.chat.id, msg.chat.title))
+        '''.format(long(msg.chat.id), str(msg.chat.title)))
 
         self.__curs.execute('''
             insert into usr values ({0:d}, '{1:s}', '{2:s}');
