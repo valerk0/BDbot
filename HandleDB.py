@@ -16,6 +16,7 @@ class DB(object):
             '''.format(msg.chat.id, msg.chat.title))
             self.__conn.commit()
         except:
+            self.__conn.rollback()
             print('failed cht')
 
         try:
@@ -24,7 +25,8 @@ class DB(object):
             '''.format(msg.user.id, msg.user.username, msg.user.first_name))
             self.__conn.commit()
         except:
-            print('failed usr',msg.user.id, msg.user.username, msg.user.first_name)
+            self.__conn.rollback()
+            print('failed usr')
 
         try:
             self.__curs.execute('''
@@ -32,6 +34,7 @@ class DB(object):
             '''.format(msg.chat.id, msg.user.id, msg.chat.id, msg.user.id))
             self.__conn.commit()
         except:
+            self.__conn.rollback()
             print('failed chtusr')
 
 
@@ -40,6 +43,7 @@ class DB(object):
             self.__curs.execute('select uid from usr where uid={0:d}'.format(bday.uid))
             f=True
         except:
+            self.__conn.rollback()
             print('select failed')
             f=False
         if f:
