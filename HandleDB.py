@@ -11,7 +11,7 @@ class DB(object):
 
     def HandleMsg(self,msg):
         self.__curs.execute('''
-            insert into cht values ({0:d}, '{1:s}');
+            insert into cht values ({0}, '{1}');
         '''.format(msg.chat.id, msg.chat.title))
 
         self.__curs.execute('''
