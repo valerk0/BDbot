@@ -22,7 +22,7 @@ class DB(object):
                 insert into usr values ({0:d}, '{1:s}', '{2:s}');
             '''.format(msg.user.id, msg.user.username, msg.user.first_name))
         except:
-            print('failed usr')
+            print('failed usr',msg.user.id, msg.user.username, msg.user.first_name)
 
         try:
             self.__curs.execute('''
