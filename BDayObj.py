@@ -12,3 +12,5 @@ class BDayObj(object):
         self.bd=int(FullDate[0])
         self.bm=int(FullDate[1])
         self.by=int(FullDate[2])
+
+    print(bd)

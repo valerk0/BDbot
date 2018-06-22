@@ -12,7 +12,7 @@ class DB(object):
     def HandleMsg(self,msg):
         try:
             self.__curs.execute('''
-                insert into cht values ({0}, '{1}');
+                insert into cht values ({0:d}, '{1:s}');
             '''.format(msg.chat.id, msg.chat.title))
         except:
             pass
