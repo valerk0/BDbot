@@ -58,7 +58,7 @@ class DB(object):
             '''.format(bday.uid, bday.uuname, bday.uname, bday.bd, bday.bm, bday.by))
             print('success ins usr')
 
-        self.__conn.commit
+        self.__conn.commit()
 
     def __del__(self):
         self.__conn.close()
