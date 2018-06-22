@@ -8,15 +8,15 @@ class user(object):
 
     @property
     def id(self):
-        return self.__id
+        return int(self.__id)
 
     @property
     def username(self):
-        return self.__uuname
+        return str(self.__uuname)
 
     @property
     def first_name(self):
-        return self.__uname
+        return str(self.__uname)
 
 class chat(object):
     def __init__(self, id, cname):
@@ -25,11 +25,11 @@ class chat(object):
 
     @property
     def id(self):
-        return self.__id
+        return int(self.__id)
 
     @property
     def title(self):
-        return self.__cname
+        return str(self.__cname)
 
 class message(object):
     def __init__(self, cht, usr):
