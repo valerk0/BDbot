@@ -11,6 +11,7 @@ with psycopg2.connect(**DBconf.db_params) as conn:
         cname varchar(255)
         );
     ''')
+
     curs.execute('''
         create table usr (
         uid bigint primary key,
@@ -20,6 +21,7 @@ with psycopg2.connect(**DBconf.db_params) as conn:
         by integer
         );
     ''')
+    
     curs.execute('''
         create table chtusr (
         cuid varchar(255) primary key,
