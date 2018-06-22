@@ -14,24 +14,26 @@ class DB(object):
             self.__curs.execute('''
                 insert into cht values ({0:d}, '{1:s}');
             '''.format(msg.chat.id, msg.chat.title))
+            self.__conn.commit()
         except:
             print('failed cht')
 
-        #try:
-        self.__curs.execute('''
-            insert into usr values ({0:d}, '{1:s}', '{2:s}');
-        '''.format(msg.user.id, msg.user.username, msg.user.first_name))
-        #except:
-         #   print('failed usr',msg.user.id, msg.user.username, msg.user.first_name)
+        try:
+            self.__curs.execute('''
+                insert into usr values ({0:d}, '{1:s}', '{2:s}');
+            '''.format(msg.user.id, msg.user.username, msg.user.first_name))
+            self.__conn.commit()
+        except:
+            print('failed usr',msg.user.id, msg.user.username, msg.user.first_name)
 
         try:
             self.__curs.execute('''
                 insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
             '''.format(msg.chat.id, msg.user.id, msg.chat.id, msg.user.id))
+            self.__conn.commit()
         except:
             print('failed chtusr')
 
-        self.__conn.commit()
 
     def SaveBDay(self, bday):
         self.__curs.execute('select uid from usr where uid={}'.format(bday.uid))
