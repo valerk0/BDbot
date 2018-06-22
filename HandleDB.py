@@ -15,21 +15,21 @@ class DB(object):
                 insert into cht values ({0:d}, '{1:s}');
             '''.format(msg.chat.id, msg.chat.title))
         except:
-            pass
+            print('failed cht')
 
         try:
             self.__curs.execute('''
                 insert into usr values ({0:d}, '{1:s}', '{2:s}');
             '''.format(msg.user.id, msg.user.username, msg.user.first_name))
         except:
-            pass
+            print('failed usr')
 
         try:
             self.__curs.execute('''
                 insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
             '''.format(msg.chat.id, msg.user.id, msg.chat.id, msg.user.id))
         except:
-            pass
+            print('failed chtusr')
 
         self.__conn.commit()
 
@@ -40,10 +40,12 @@ class DB(object):
                update usr set bd={0:d}, bm={1:d}, by={2:d}
                 where uid={3:d}
             '''.format(bday.bd, bday.bm, bday.by, bday.uid))
+            print('success upd usr')
         else:
             self.__curs.execute('''
                 insert into usr values ({0:d}, '{1:s}', '{2:s}', {3:d}, {4:d}, {5:d});
             '''.format(bday.uid, bday.uuname, bday.uname, bday.bd, bday.bm, bday.by))
+            print('success ins usr')
 
         self.__conn.commit
 
