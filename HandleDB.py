@@ -14,49 +14,37 @@ class DB(object):
             self.__curs.execute('''
                 insert into cht values ({0:d}, '{1:s}');
             '''.format(msg.chat.id, msg.chat.title))
-            self.__conn.commit()
         except:
-            self.__conn.rollback()
             print('failed cht')
 
         try:
             self.__curs.execute('''
                 insert into usr values ({0:d}, '{1:s}', '{2:s}');
             '''.format(msg.user.id, msg.user.username, msg.user.first_name))
-            self.__conn.commit()
         except:
-            self.__conn.rollback()
             print('failed usr')
 
         try:
             self.__curs.execute('''
                 insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
             '''.format(msg.chat.id, msg.user.id, msg.chat.id, msg.user.id))
-            self.__conn.commit()
         except:
-            self.__conn.rollback()
             print('failed chtusr')
+
+        self.__conn.commit()
 
 
     def SaveBDay(self, bday):
-        try:
-            self.__curs.execute('select uid from usr where uid={0:d}'.format(bday.uid))
-            f=True
-        except:
-            self.__conn.rollback()
-            print('select failed')
-            f=False
-        if f:
+        self.__curs.execute('select uid from usr where uid={0:d}'.format(bday.uid))
+        if self.__curs.fetchall() is not None:
             self.__curs.execute('''
                update usr set bd={0:d}, bm={1:d}, by={2:d}
                 where uid={3:d}
             '''.format(bday.bd, bday.bm, bday.by, bday.uid))
-            print('success upd usr')
         else:
             self.__curs.execute('''
                 insert into usr values ({0:d}, '{1:s}', '{2:s}', {3:d}, {4:d}, {5:d});
             '''.format(bday.uid, bday.uuname, bday.uname, bday.bd, bday.bm, bday.by))
-            print('success ins usr')
 
         self.__conn.commit()
 
