@@ -10,17 +10,26 @@ class DB(object):
         self.__curs=self.__conn.cursor()
 
     def HandleMsg(self,msg):
-        self.__curs.execute('''
-            insert into cht values ({0}, '{1}');
-        '''.format(msg.chat.id, msg.chat.title))
+        try:
+            self.__curs.execute('''
+                insert into cht values ({0}, '{1}');
+            '''.format(msg.chat.id, msg.chat.title))
+        except:
+            pass
 
-        self.__curs.execute('''
-            insert into usr values ({0:d}, '{1:s}', '{2:s}');
-        '''.format(msg.user.id, msg.user.username, msg.user.first_name))
+        try:
+            self.__curs.execute('''
+                insert into usr values ({0:d}, '{1:s}', '{2:s}');
+            '''.format(msg.user.id, msg.user.username, msg.user.first_name))
+        except:
+            pass
 
-        self.__curs.execute('''
-            insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
-        '''.format(msg.chat.id, msg.user.id, msg.chat.id, msg.user.id))
+        try:
+            self.__curs.execute('''
+                insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
+            '''.format(msg.chat.id, msg.user.id, msg.chat.id, msg.user.id))
+        except:
+            pass
 
         self.__conn.commit()
 
