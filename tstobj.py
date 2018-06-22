@@ -6,26 +6,26 @@ class user(object):
         self.__uuname=uuname
         self.__uname=uname
 
-    id= int(self.__id)
+    id= int(__id)
 
-    username= str(self.__uuname)
+    username= str(__uuname)
 
-    first_name= str(self.__uname)
+    first_name= str(__uname)
 
 class chat(object):
     def __init__(self, id, cname):
         self.__id=id
         self.__cname=cname
 
-    id= int(self.__id)
+    id= int(__id)
 
-    title= str(self.__cname)
+    title= str(__cname)
 
 class message(object):
     def __init__(self, cht, usr):
         self.__cht=cht
         self.__usr=usr
 
-    chat= self.__cht
+    chat= __cht
 
-    user= self.__usr
+    user= __usr
