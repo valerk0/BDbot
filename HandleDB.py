@@ -36,8 +36,13 @@ class DB(object):
 
 
     def SaveBDay(self, bday):
-        self.__curs.execute('select uid from usr where uid={0:d}'.format(bday.uid))
-        if self.__curs.fetchall() is not None:
+        try:
+            self.__curs.execute('select uid from usr where uid={0:d}'.format(bday.uid))
+            f=True
+        except:
+            print('select failed')
+            f=False
+        if f:
             self.__curs.execute('''
                update usr set bd={0:d}, bm={1:d}, by={2:d}
                 where uid={3:d}
