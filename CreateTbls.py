@@ -15,6 +15,7 @@ with psycopg2.connect(**DBconf.db_params) as conn:
     curs.execute('''
         create table usr (
         uid bigint primary key,
+        uuname varchar(255),
         uname varchar(255),
         bd integer,
         bm integer,
