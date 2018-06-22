@@ -6,40 +6,26 @@ class user(object):
         self.__uuname=uuname
         self.__uname=uname
 
-    @property
-    def id(self):
-        return int(self.__id)
+    id= int(self.__id)
 
-    @property
-    def username(self):
-        return str(self.__uuname)
+    username= str(self.__uuname)
 
-    @property
-    def first_name(self):
-        return str(self.__uname)
+    first_name= str(self.__uname)
 
 class chat(object):
     def __init__(self, id, cname):
         self.__id=id
         self.__cname=cname
 
-    @property
-    def id(self):
-        return int(self.__id)
+    id= int(self.__id)
 
-    @property
-    def title(self):
-        return str(self.__cname)
+    title= str(self.__cname)
 
 class message(object):
     def __init__(self, cht, usr):
         self.__cht=cht
         self.__usr=usr
 
-    @property
-    def chat(self):
-        return self.__cht
+    chat= self.__cht
 
-    @property
-    def user(self):
-        return self.__usr
+    user= self.__usr
