@@ -9,6 +9,6 @@ class BDayObj(object):
 
     def SetDate(self, command):
         FullDate=command.split()[1].split('.')
-        self.bd=FullDate[0]
-        self.bm=FullDate[1]
-        self.by=FullDate[2]
+        self.bd=int(FullDate[0])
+        self.bm=int(FullDate[1])
+        self.by=int(FullDate[2])
