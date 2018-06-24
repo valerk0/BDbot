@@ -8,7 +8,7 @@ class BDayObj(object):
         self.uname=usr.first_name
 
     def SetDate(self, command):
-        FullDate=command.split()[1].split('.')
+        FullDate=command.split('.')
         self.bd=int(FullDate[0])
         self.bm=int(FullDate[1])
         self.by=int(FullDate[2])

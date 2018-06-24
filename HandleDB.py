@@ -10,25 +10,27 @@ class DB(object):
         self.__conn=psycopg2.connect(**conf.params)
         self.__curs=self.__conn.cursor()
 
-    def HandleMsg(self,msg):
+    def HandleMsg(self,upd):
+        usr=upd.effective_user
+        cht=upd.effective_chat
         try:
             self.__curs.execute('''
                 insert into cht values ({0:d}, '{1:s}');
-            '''.format(msg.chat.id, msg.chat.title))
+            '''.format(cht.id, cht.title))
         except:
             print('failed cht')
 
         try:
             self.__curs.execute('''
                 insert into usr values ({0:d}, '{1:s}', '{2:s}');
-            '''.format(msg.user.id, msg.user.username, msg.user.first_name))
+            '''.format(usr.id, usr.username, usr.first_name))
         except:
             print('failed usr')
 
         try:
             self.__curs.execute('''
                 insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
-            '''.format(msg.chat.id, msg.user.id, msg.chat.id, msg.user.id))
+            '''.format(cht.id, usr.id, cht.id, usr.id))
         except:
             print('failed chtusr')
 
