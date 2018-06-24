@@ -3,6 +3,7 @@ __author__ = 'Valery'
 import datetime
 
 def DayInterval():
+    print(datetime.timedelta(days=1))
     return datetime.timedelta(days=1)
 
 def FirstDay():
@@ -10,6 +11,7 @@ def FirstDay():
     TargetTime=datetime.datetime(CurTime.year,CurTime.month,CurTime.day,6)
     if ~CurTime.hour<6:
         TargetTime=TargetTime+datetime.timedelta(days=1)
+    print(datetime.timedelta(TargetTime-CurTime))
     return datetime.timedelta(TargetTime-CurTime)
 
 def NextMonth():
