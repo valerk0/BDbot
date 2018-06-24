@@ -52,6 +52,7 @@ def main():
     print('start program')
     conf=confData('botconf.ini','BOT')
 
+    print(**conf.params)
     updater=Updater(**conf.params)
     dp=updater.dispatcher
     jq=updater.job_queue
