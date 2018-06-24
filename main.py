@@ -22,7 +22,7 @@ def help(bot, update):
     print('help')
 
 def setBDay(bot, update, args):
-    print('len ', len(args), ~len(args)==1|(len(args)==1&~len(args[0].split('.'))==3))
+    print('len ', len(args), ~len(args)==1,~len(args)==1|(len(args)==1&~len(args[0].split('.'))==3))
     if ~len(args)==1|(len(args)==1&~len(args[0].split('.'))==3):
         update.message.reply_text(emojize('''
         Неверный формат даты!:see-no-evil monkey:\n
