@@ -13,12 +13,6 @@ class DB(object):
     def HandleMsg(self,upd):
         usr=upd.effective_user
         cht=upd.effective_chat
-        try:
-            self.__curs.execute('''
-                insert into cht values ({0:d}, '{1:s}');
-            '''.format(cht.id, cht.title))
-        except:
-            print('failed cht')
 
         try:
             self.__curs.execute('''
@@ -27,12 +21,20 @@ class DB(object):
         except:
             print('failed usr')
 
-        try:
-            self.__curs.execute('''
-                insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
-            '''.format(cht.id, usr.id, cht.id, usr.id))
-        except:
-            print('failed chtusr')
+        if ~cht.id==usr.id:
+            try:
+                self.__curs.execute('''
+                    insert into cht values ({0:d}, '{1:s}');
+                '''.format(cht.id, cht.title))
+            except:
+                print('failed cht')
+
+            try:
+                self.__curs.execute('''
+                    insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
+                '''.format(cht.id, usr.id, cht.id, usr.id))
+            except:
+                print('failed chtusr')
 
         self.__conn.commit()
 
