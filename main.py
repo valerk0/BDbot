@@ -33,6 +33,7 @@ def setBDay(bot, update, args):
             datetime.strptime(args[0],'%d.%m.%Y')
         except:
             WrongDate=True
+    print(WrongDate)
     if WrongDate:
         update.message.reply_text(emojize('''
         Неверный формат даты!:see-no-evil monkey:\n
