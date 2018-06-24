@@ -17,10 +17,10 @@ def start(bot, update):
 @private
 def help(bot, update):
     update.message.reply_text(emojize('''
-    Бот поздравит Вас с днем рождения:bouquet: в чатах, которых вы состоите.\n\n
-    Пожалуйста, задайте дату рождения в формате:\n
-    /bday dd.mm.yyyy
-    '''))
+        Бот поздравит Вас с днем рождения:bouquet: в чатах, которых вы состоите.
+        \n\nПожалуйста, задайте дату рождения в формате:
+        \n/bday dd.mm.yyyy
+        '''))
     print('help')
 
 def setBDay(bot, update, args):
@@ -38,18 +38,18 @@ def setBDay(bot, update, args):
             WrongDate=True
     print(WrongDate)
     if WrongDate:
-        update.message.reply_text('''
-        Неверный формат даты!\n
-        Правильный формат:\n
-        /bday dd.mm.yyyy
-        ''')
+        update.message.reply_text(emojize('''
+            Неверный формат даты!:see-no-evil monkey:
+            \nПравильный формат:
+            \n/bday dd.mm.yyyy
+            '''))
         print('bday fail')
         return
     bday=BDayObj(update.message.from_user)
     bday.SetDate(args[0])
     db=DB()
     db.SaveBDay(bday)
-    update.message.reply_text(emojize('''Сохранил Вашу дату рождения({}) :thumbs up:'''.format(args[0])))
+    update.message.reply_text(emojize('''Сохранил Вашу дату рождения ({}) :thumbs up:'''.format(args[0])))
     print('bday success')
 
 def ProcessMsg(bot, update):
