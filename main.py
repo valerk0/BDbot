@@ -28,7 +28,7 @@ def setBDay(bot, update, args):
     form=re.compile('^\d{1,2}\.\d{1,2}\.\d{4}$')
     print('bday start1')
     WrongDate=False
-    if ~form.match(args[0])==None:
+    if form.match(args[0])==None:
         WrongDate=True
     else:
         try:
