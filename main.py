@@ -6,6 +6,7 @@ from helpers import private
 from HandleDB import DB
 from BDayObj import BDayObj
 from emoji import emojize
+import re
 
 @private
 def start(bot, update):
@@ -22,7 +23,8 @@ def help(bot, update):
     print('help')
 
 def setBDay(bot, update, args):
-    print('len ', len(args), ~len(args)==1,~len(args)==1|(len(args)==1&~len(args[0].split('.'))==3))
+    form=re.compile('\d{2}\.\d{2}\.\d{4}')
+    print(form.match(args[0]))
     if (~len(args)==1)|(len(args)==1&~len(args[0].split('.'))==3):
         update.message.reply_text(emojize('''
         Неверный формат даты!:see-no-evil monkey:\n
