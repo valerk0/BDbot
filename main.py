@@ -33,6 +33,7 @@ def setBDay(bot, update, args):
         try:
             datetime.strptime(args[0],'%d.%m.%Y')
         except:
+            print('wd')
             WrongDate=True
     print(WrongDate)
     if WrongDate:
