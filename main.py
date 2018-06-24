@@ -7,6 +7,7 @@ from HandleDB import DB
 from BDayObj import BDayObj
 from emoji import emojize
 import re
+from datetime import datetime
 
 @private
 def start(bot, update):
@@ -23,9 +24,16 @@ def help(bot, update):
     print('help')
 
 def setBDay(bot, update, args):
-    form=re.compile('^\d{2}\.\d{2}\.\d{4}$')
-    print(form.match(args[0]))
-    if (~len(args)==1)|(len(args)==1&~len(args[0].split('.'))==3):
+    form=re.compile('^\d{1,2}\.\d{1,2}\.\d{4}$')
+    WrongDate=False
+    if ~form.match(args[0])==None:
+        WrongDate=True
+    else:
+        try:
+            datetime.strptime(args[0],'%d.%m.%Y')
+        except:
+            WrongDate=True
+    if WrongDate:
         update.message.reply_text(emojize('''
         Неверный формат даты!:see-no-evil monkey:\n
         Правильный формат:\n
@@ -37,7 +45,7 @@ def setBDay(bot, update, args):
     bday.SetDate(args[0])
     db=DB()
     db.SaveBDay(bday)
-    update.message.reply_text(emojize('''Сохранил:thumbs up:'''))
+    update.message.reply_text(emojize('''Сохранил Вашу дату рождения({}) :thumbs up:'''.format(args[0])))
     print('bday success')
 
 def ProcessMsg(bot, update):
