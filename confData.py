@@ -11,5 +11,6 @@ class confData(object):
     def params(self):
         R={}
         R.update(self.__IniFile[self.__section])
+        print(R)
         return R
 
