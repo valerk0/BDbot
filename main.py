@@ -62,6 +62,7 @@ def main():
     dp.add_handler(CommandHandler('bday', setBDay, pass_args=True),1)
     print('handlers added')
 
+    print(DayInterval)
     dJob=jq.run_repeating(DaylyJob, DayInterval, FirstDay)
     mJob=jq.run_once(MonthlyJob, NextMonth)
     print('jobs added')
