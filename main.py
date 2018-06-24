@@ -70,3 +70,4 @@ def main():
     updater.idle()
     print('-1')
 
+main()
