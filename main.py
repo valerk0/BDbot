@@ -35,11 +35,11 @@ def setBDay(bot, update, args):
             WrongDate=True
     print(WrongDate)
     if WrongDate:
-        update.message.reply_text(emojize('''
-        Неверный формат даты!:see-no-evil monkey:\n
+        update.message.reply_text('''
+        Неверный формат даты!\n
         Правильный формат:\n
         /bday dd.mm.yyyy
-        '''))
+        ''')
         print('bday fail')
         return
     bday=BDayObj(update.message.from_user)
@@ -52,7 +52,7 @@ def setBDay(bot, update, args):
 def ProcessMsg(bot, update):
     db=DB()
     db.HandleMsg(update)
-    print('process msg')
+    print(update.effective_user.username)
 
 def DaylyJob(bot, job):
     pass
