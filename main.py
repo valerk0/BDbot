@@ -23,7 +23,7 @@ def help(bot, update):
     print('help')
 
 def setBDay(bot, update, args):
-    form=re.compile('\d{2}\.\d{2}\.\d{4}')
+    form=re.compile('^\d{2}\.\d{2}\.\d{4}$')
     print(form.match(args[0]))
     if (~len(args)==1)|(len(args)==1&~len(args[0].split('.'))==3):
         update.message.reply_text(emojize('''
