@@ -1,9 +1,10 @@
 __author__ = 'Valery'
 
 import psycopg2
-from DBconfData import DBconf
+from confData import confData
 
-with psycopg2.connect(**DBconf.db_params) as conn:
+conf=confData('dbconfig.ini','DATABASE')
+with psycopg2.connect(**conf.params) as conn:
     curs=conn.cursor()
     curs.execute('drop table cht;')
 

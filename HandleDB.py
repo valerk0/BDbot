@@ -1,12 +1,13 @@
 __author__ = 'Valery'
 
 import psycopg2
-from DBconfData import DBconf
+from confData import confData
 
 class DB(object):
 
     def __init__(self):
-        self.__conn=psycopg2.connect(**DBconf.db_params)
+        conf=confData('dbconfig.ini','DATABASE')
+        self.__conn=psycopg2.connect(**conf.params)
         self.__curs=self.__conn.cursor()
 
     def HandleMsg(self,msg):
