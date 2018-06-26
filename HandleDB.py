@@ -34,13 +34,15 @@ class DB(object):
         self.__conn=psycopg2.connect(**conf.params)
         self.__curs=self.__conn.cursor()
         try:
-            print('1')
             self.__curs.execute(u"insert into cht values ({0:d}, '{1:s}');".format(cht.id, cht.title.strip()))
             self.__conn.commit()
-            print('2')
         except:
             pass
 
+        self.__conn.close()
+        conf=confData('dbconfig.ini','DATABASE')
+        self.__conn=psycopg2.connect(**conf.params)
+        self.__curs=self.__conn.cursor()
         try:
             self.__curs.execute('''
                 insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
