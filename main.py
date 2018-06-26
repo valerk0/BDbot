@@ -86,7 +86,6 @@ def main():
     updater=Updater(conf.params['token'])
     dp=updater.dispatcher
     jq=updater.job_queue
-    print(updater.bot.get_me())
 
     dp.add_handler(MessageHandler(~Filters.status_update, ProcessMsg),0)
     dp.add_handler(CommandHandler('start', start),1)

@@ -21,7 +21,7 @@ class DB(object):
         try:
             self.__curs.execute('''
                 insert into usr values ({0:d}, '{1:s}', '{2:s}');
-            '''.format(usr.id, usr.username, usr.first_name))
+            '''.format(usr.id, usr.username.strip(), usr.first_name.strip()))
         except:
             pass
 
@@ -29,7 +29,7 @@ class DB(object):
             try:
                 self.__curs.execute('''
                     insert into cht values ({0:d}, '{1:s}');
-                '''.format(cht.id, cht.title))
+                '''.format(cht.id, cht.title.strip()))
             except:
                 pass
 
