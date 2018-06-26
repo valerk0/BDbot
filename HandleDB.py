@@ -31,9 +31,7 @@ class DB(object):
 
         try:
             print('1')
-            self.__curs.execute('''
-            insert into cht values ({0:d}, '{1:s}');
-        '''.format(cht.id, cht.title.strip()))
+            self.__curs.execute('''insert into cht values ({0:d}, '{1:s}');'''.format(cht.id, cht.title.strip()))
             self.__conn.commit()
             print('2')
         except:
