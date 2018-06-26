@@ -68,6 +68,7 @@ class DB(object):
             if records[3]==None:
                 return False
             else:
+                print(datetime.date(year=records[6], month=records[5], day=records[4]))
                 return datetime.date(year=records[6], month=records[5], day=records[4])
         else:
             return 
