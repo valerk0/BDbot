@@ -26,7 +26,7 @@ class DB(object):
             pass
 
         print(cht.id,' ' ,usr.id, cht.id==usr.id)
-        if ~cht.id==usr.id:
+        if not cht.id==usr.id:
             try:
                 print('''
                     insert into cht values ({0:d}, '{1:s}');
