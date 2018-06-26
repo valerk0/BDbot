@@ -63,19 +63,19 @@ class DB(object):
         rows=self.__curs.fetchall()
         if rows.__len__()>0:
             records=rows[0]
-            if records[3]=None:
+            if records[3]==None:
                 return False
             else:
                 return datetime.date(year=records[6], month=records[5], day=records[4])
         else:
             return 
 
-    def GetUserBDayList():
+    def GetUserBDayList(self):
         now=datetime.datetime.now()
         self.__curs.execute('select uid, uuname, uname from usr where bd={0:d}, bm={1:d}, by={2:d}'.format(now.day, now.month, now.year))
         return self.__curs.fetchall()
 
-    def GetChatsList(userList):
+    def GetChatsList(self,userList):
         results=[]
         for user in userList:
             self.__curs.execute('select cid from chtusr where uid={0:d}'.format(user[0]))
