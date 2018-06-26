@@ -25,7 +25,7 @@ class DB(object):
         except:
             pass
 
-        print(cht.id,' ' ,usr.id, ~cht.id==usr.id)
+        print(cht.id,' ' ,usr.id, ~(cht.id==usr.id))
         if ~cht.id==usr.id:
             try:
                 print('''
