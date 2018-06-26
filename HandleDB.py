@@ -26,22 +26,26 @@ class DB(object):
         except:
             pass
 
-        if not cht.id==usr.id:
-            try:
-                self.__curs.execute('''
-                insert into cht values ({0:d}, '{1:s}');
-            '''.format(cht.id, cht.title.strip()))
-                self.__conn.commit()
-            except:
-                pass
+        if cht.id==usr.id:
+            return
 
-            try:
-                self.__curs.execute('''
-                    insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
-                '''.format(cht.id, usr.id, cht.id, usr.id))
-                self.__conn.commit()
-            except:
-                pass
+        try:
+            print('1')
+            self.__curs.execute('''
+            insert into cht values ({0:d}, '{1:s}');
+        '''.format(cht.id, cht.title.strip()))
+            self.__conn.commit()
+            print('2')
+        except:
+            pass
+
+        try:
+            self.__curs.execute('''
+                insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
+            '''.format(cht.id, usr.id, cht.id, usr.id))
+            self.__conn.commit()
+        except:
+            pass
 
 
 
