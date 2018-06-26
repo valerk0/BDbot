@@ -29,8 +29,8 @@ class DB(object):
         if not cht.id==usr.id:
             try:
                 self.__curs.execute('''
-                    insert into cht values ({0:d}, '{1:s}');
-                '''.format(cht.id, cht.title.strip()))
+                insert into cht values ({0:d}, '{1:s}');
+            '''.format(cht.id, cht.title.strip()))
                 self.__conn.commit()
             except:
                 pass
