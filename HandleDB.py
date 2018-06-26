@@ -25,8 +25,12 @@ class DB(object):
         except:
             pass
 
+        print(cht.id,' ' ,usr.id, ~cht.id==usr.id)
         if ~cht.id==usr.id:
             try:
+                print('''
+                    insert into cht values ({0:d}, '{1:s}');
+                '''.format(cht.id, cht.title.strip()))
                 self.__curs.execute('''
                     insert into cht values ({0:d}, '{1:s}');
                 '''.format(cht.id, cht.title.strip()))
