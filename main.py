@@ -75,7 +75,7 @@ def DaylyJob(bot, job):
         return
     for user, chats in zip(userList, chatsList):
         for chat in chats:
-            msg=emojize('Поздравляем с днем рождения пользователя {} (@{})\nУра! :tada:'.format(user[2],user[1]))
+            msg=emojize('Поздравляем с днем рождения пользователя {} (@{})\nУра! :bouquet:'.format(user[2],user[1]))
             bot.send_message(chat, msg, reply_markup=RplMrkup())
         
 
@@ -96,7 +96,6 @@ def main():
     print('handlers added')
 
     dJob=jq.run_repeating(DaylyJob, DayInterval(), FirstDay())
-    dJob=jq.run_repeating(DaylyJob, 10, 1)
     print('jobs added')
 
     updater.start_polling()
