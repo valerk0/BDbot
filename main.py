@@ -88,7 +88,7 @@ def main():
     dp=updater.dispatcher
     jq=updater.job_queue
 
-    dp.add_handler(MessageHandler(~Filters.status_update, ProcessMsg),0)
+    dp.add_handler(MessageHandler(not Filters.status_update, ProcessMsg),0)
     dp.add_handler(CommandHandler('start', start),1)
     dp.add_handler(CommandHandler('help', help),1)
     dp.add_handler(CommandHandler('bday', setBDay, pass_args=True),1)
