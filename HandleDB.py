@@ -64,6 +64,7 @@ class DB(object):
         print(rows)
         if rows.__len__()>0:
             records=rows[0]
+            print(records[3])
             if records[3]==None:
                 return False
             else:
