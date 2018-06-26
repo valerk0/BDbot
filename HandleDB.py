@@ -69,7 +69,7 @@ class DB(object):
             #     print('none')
             #     return False
             # else:
-            #     print(records[6], records[5],records[4])
+            print(records[6], records[5],records[4])
             return datetime.date(year=records[6], month=records[5], day=records[4])
         else:
             return 
