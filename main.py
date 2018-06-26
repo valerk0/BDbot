@@ -55,6 +55,7 @@ def getBDay(bot,update,args):
         return
     db=DB()
     bday=db.getDateByUN(UN)
+    print(bday)
     if isinstance(bday,(date,datetime)):
         update.message.reply_text('Дата рождения пользователя @{} - {}'.format(UN,bday), reply_markup=RplMrkup())
     else:

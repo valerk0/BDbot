@@ -61,6 +61,7 @@ class DB(object):
                 select * from usr where uuname='{0:s}'
             '''.format(UN))
         rows=self.__curs.fetchall()
+        print(rows)
         if rows.__len__()>0:
             records=rows[0]
             if records[3]==None:
