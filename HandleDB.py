@@ -66,6 +66,7 @@ class DB(object):
             records=rows[0]
             print(records[3])
             if records[3]==None:
+                print('none')
                 return False
             else:
                 print(records[6], records[5],records[4])
