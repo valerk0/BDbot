@@ -65,12 +65,11 @@ class DB(object):
         if rows.__len__()>0:
             records=rows[0]
             print(records[3])
-            # if not records[3]:
-            #     print('none')
-            #     return False
-            # else:
-            print(records[6], records[5],records[4])
-            return datetime.date(year=records[6], month=records[5], day=records[4])
+            if not records[3]:
+                print('none')
+                return False
+            else:
+                return datetime.date(year=records[5], month=records[4], day=records[3])
         else:
             return 
 
