@@ -66,7 +66,7 @@ class DB(object):
             if not records[3]:
                 return False
             else:
-                return datetime.date(year=records[5], month=records[4], day=records[3])
+                return datetime.date(year=records[5], month=records[4], day=records[3]).strftime('%d.%m.%Y')
         else:
             return 
 
