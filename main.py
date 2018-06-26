@@ -96,7 +96,6 @@ def main():
     print('handlers added')
 
     dJob=jq.run_repeating(DaylyJob, DayInterval(), FirstDay())
-    dJob=jq.run_repeating(DaylyJob, 10, 1)
     print('jobs added')
 
     updater.start_polling()
