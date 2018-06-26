@@ -42,8 +42,10 @@ def setBDay(bot, update, args):
     print('saved bday ', args[0], ' of user @', update.message.from_user.username)
 
 def getBDay(bot,update,args):
+    print(args)
     try:
         UN=args[0].split('@')[1]
+        print(UN)
     except:
         update.message.reply_text(emojize('''
             Неверный формат запроса!:see-no-evil:
