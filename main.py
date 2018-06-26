@@ -1,8 +1,7 @@
 __author__ = 'Valery'
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from JobHelpers import DayInterval, FirstDay
 from confData import confData
-from helpers import private, RplMrkup
+from helpers import private, RplMrkup, DayInterval, FirstDay
 from HandleDB import DB
 from BDayObj import BDayObj
 from emoji import emojize

@@ -61,12 +61,9 @@ class DB(object):
                 select * from usr where uuname='{0:s}'
             '''.format(UN))
         rows=self.__curs.fetchall()
-        print(rows)
         if rows.__len__()>0:
             records=rows[0]
-            print(records[3])
             if not records[3]:
-                print('none')
                 return False
             else:
                 return datetime.date(year=records[5], month=records[4], day=records[3])
