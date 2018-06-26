@@ -6,9 +6,6 @@ from confData import confData
 class DB(object):
 
     def __init__(self):
-        __connect()
-
-    def __connect(self):
         conf=confData('dbconfig.ini','DATABASE')
         self.__conn=psycopg2.connect(**conf.params)
         self.__curs=self.__conn.cursor()
@@ -33,7 +30,9 @@ class DB(object):
             return
 
         self.__conn.close()
-        __connect()
+        conf=confData('dbconfig.ini','DATABASE')
+        self.__conn=psycopg2.connect(**conf.params)
+        self.__curs=self.__conn.cursor()
         try:
             print('1')
             self.__curs.execute(u"insert into cht values ({0:d}, '{1:s}');".format(cht.id, cht.title.strip()))
