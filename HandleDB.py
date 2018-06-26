@@ -22,31 +22,28 @@ class DB(object):
             self.__curs.execute('''
                 insert into usr values ({0:d}, '{1:s}', '{2:s}');
             '''.format(usr.id, usr.username.strip(), usr.first_name.strip()))
+            self.__conn.commit()
         except:
             pass
 
         if not cht.id==usr.id:
             try:
-                print('''
-                    insert into cht values ({0:d}, '{1:s}');
-                '''.format(cht.id, cht.title.strip()))
                 self.__curs.execute('''
                     insert into cht values ({0:d}, '{1:s}');
                 '''.format(cht.id, cht.title.strip()))
+                self.__conn.commit()
             except:
                 pass
 
             try:
-                print('''
-                    insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
-                '''.format(cht.id, usr.id, cht.id, usr.id))
                 self.__curs.execute('''
                     insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
                 '''.format(cht.id, usr.id, cht.id, usr.id))
+                self.__conn.commit()
             except:
                 pass
 
-        self.__conn.commit()
+
 
     def SaveBDay(self, bday):
         self.__curs.execute('select uid from usr where uid={0:d}'.format(bday.uid))
