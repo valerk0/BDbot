@@ -27,17 +27,17 @@ def setBDay(bot, update, args):
     try:
         datetime.strptime(args[0],'%d.%m.%Y')
     except:
-        update.message.reply_text(emojize('''
-            Неверный формат даты!:see-no-evil:
+        update.message.reply_text('''
+            Неверный формат даты!
             \nПравильный формат:
             \n/bday dd.mm.yyyy
-            '''))
+            ''')
         return
     bday=BDayObj(update.message.from_user)
     bday.SetDate(args[0])
     db=DB()
     db.SaveBDay(bday)
-    update.message.reply_text(emojize('''Сохранил Вашу дату рождения ({}) :thumbsup:'''.format(args[0])))
+    update.message.reply_text('''Сохранил Вашу дату рождения ({}) '''.format(args[0]))
     print('saved bday ', args[0], ' of user @', update.message.from_user.username)
 
 def getBDay(bot,update,args):
@@ -46,11 +46,11 @@ def getBDay(bot,update,args):
         UN=args[0].split('@')[1]
         print(UN)
     except:
-        update.message.reply_text(emojize('''
-            Неверный формат запроса!:see-no-evil:
+        update.message.reply_text('''
+            Неверный формат запроса!
             \nПравильный формат:
             \n/get @username
-            '''))
+            ''')
         return
     db=DB()
     bday=db.getDateByUN(UN)
