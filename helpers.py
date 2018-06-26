@@ -10,7 +10,7 @@ def private(func):
     return wrapped
 
 def RplMrkup():
-	conf=confData('botconf.ini','BOT')
+    conf=confData('botconf.ini','BOT')
     BT=telegram.InlineKeyboardButton('Задать дату рождения',url='https://t.me/{0:s}?start'.format(conf.params['username']))
     RM=telegram.InlineKeyboardMarkup([[BT]])
     return RM
