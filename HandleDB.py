@@ -1,6 +1,6 @@
 __author__ = 'Valery'
 
-import psycopg2
+import psycopg2, datetime
 from confData import confData
 
 class DB(object):
@@ -9,6 +9,10 @@ class DB(object):
         conf=confData('dbconfig.ini','DATABASE')
         self.__conn=psycopg2.connect(**conf.params)
         self.__curs=self.__conn.cursor()
+
+    def __del__(self):
+        self.__conn.close()
+
 
     def HandleMsg(self,upd):
         usr=upd.effective_user
@@ -19,7 +23,7 @@ class DB(object):
                 insert into usr values ({0:d}, '{1:s}', '{2:s}');
             '''.format(usr.id, usr.username, usr.first_name))
         except:
-            print('failed usr')
+            pass
 
         if ~cht.id==usr.id:
             try:
@@ -27,17 +31,16 @@ class DB(object):
                     insert into cht values ({0:d}, '{1:s}');
                 '''.format(cht.id, cht.title))
             except:
-                print('failed cht')
+                pass
 
             try:
                 self.__curs.execute('''
                     insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
                 '''.format(cht.id, usr.id, cht.id, usr.id))
             except:
-                print('failed chtusr')
+                pass
 
         self.__conn.commit()
-
 
     def SaveBDay(self, bday):
         self.__curs.execute('select uid from usr where uid={0:d}'.format(bday.uid))
@@ -53,5 +56,37 @@ class DB(object):
 
         self.__conn.commit()
 
-    def __del__(self):
-        self.__conn.close()
+    def getDateByUN(self, UN):
+        self.__curs.execute('''
+                select * from usr where uuname='{0:s}'
+            '''.format(UN))
+        rows=self.__curs.fetchall()
+        if rows.__len__()>0:
+            records=rows[0]
+            if records[3]=None:
+                return False
+            else:
+                return datetime.date(year=records[6], month=records[5], day=records[4])
+        else:
+            return 
+
+    def GetUserBDayList():
+        now=datetime.datetime.now()
+        self.__curs.execute('select uid, uuname, uname from usr where bd={0:d}, bm={1:d}, by={2:d}'.format(now.day, now.month, now.year))
+        return self.__curs.fetchall()
+
+    def GetChatsList(userList):
+        results=[]
+        for user in userList:
+            self.__curs.execute('select cid from chtusr where uid={0:d}'.format(user[0]))
+            chatsrows=self.__curs.fetchall()
+            result=[]
+            if len(chatsrows)>0:
+                for chats in chatsrows:
+                    for chat in chats:
+                        result.append(chat)
+            else:
+                result.append(user[0])
+            results.append(result)
+        return results
+

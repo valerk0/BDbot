@@ -1,13 +1,12 @@
 __author__ = 'Valery'
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from JobHelpers import DayInterval, FirstDay, NextMonth
+from JobHelpers import DayInterval, FirstDay
 from confData import confData
-from helpers import private
+from helpers import private, RplMrkup
 from HandleDB import DB
 from BDayObj import BDayObj
 from emoji import emojize
-import re
-from datetime import datetime
+from datetime import datetime, date
 
 @private
 def start(bot, update):
@@ -20,54 +19,71 @@ def help(bot, update):
         Бот поздравит Вас с днем рождения:bouquet: в чатах, которых вы состоите.
         \n\nПожалуйста, задайте дату рождения в формате:
         \n/bday dd.mm.yyyy
+        \n\nПосмотреть чью-либо дату рождения можно командой:
+        \n/get @username
         '''))
     print('help')
 
 def setBDay(bot, update, args):
-    print('bday start')
-    form=re.compile('^\d{1,2}\.\d{1,2}\.\d{4}$')
-    print('bday start1')
-    WrongDate=False
-    if form.match(args[0])==None:
-        WrongDate=True
-    else:
-        try:
-            datetime.strptime(args[0],'%d.%m.%Y')
-        except:
-            print('wd')
-            WrongDate=True
-    print(WrongDate)
-    if WrongDate:
+    try:
+        datetime.strptime(args[0],'%d.%m.%Y')
+    except:
         update.message.reply_text(emojize('''
-            Неверный формат даты!:see-no-evil monkey:
+            Неверный формат даты!:see-no-evil:
             \nПравильный формат:
             \n/bday dd.mm.yyyy
             '''))
-        print('bday fail')
         return
     bday=BDayObj(update.message.from_user)
     bday.SetDate(args[0])
     db=DB()
     db.SaveBDay(bday)
-    update.message.reply_text(emojize('''Сохранил Вашу дату рождения ({}) :thumbs up:'''.format(args[0])))
-    print('bday success')
+    update.message.reply_text(emojize('''Сохранил Вашу дату рождения ({}) :thumbsup:'''.format(args[0])))
+    print('saved bday ', args[0], ' of user @', update.message.from_user.username)
+
+def getBDay(bot,update,args):
+    try:
+        UN=args[0].split('@')[1]
+    except:
+        update.message.reply_text(emojize('''
+            Неверный формат запроса!:see-no-evil:
+            \nПравильный формат:
+            \n/get @username
+            '''))
+        return
+    db=DB()
+    bday=db.getDateByUN(UN)
+    if isinstance(bday,(date,datetime)):
+        update.message.reply_text('Дата рождения пользователя @{} - {}'.format(UN,bday), reply_markup=RplMrkup())
+    else:
+        update.message.reply_text('Мне неизвестна дата рождения пользователя @{}'.format(UN), reply_markup=RplMrkup())
+    print('showed bday: @{} - {}'.format(UN,bday))    
 
 def ProcessMsg(bot, update):
     db=DB()
     db.HandleMsg(update)
-    print(update.effective_user.username)
+    print('updated/save data of @', update.effective_user.username, ' for chat ', update.effective_chat.title)
 
 def DaylyJob(bot, job):
-    pass
+    db=DB()
+    userList=db.GetUserBDayList()
+    if len(userList)<1:
+        return
+    chatsList=db.GetChatsList(userList)
+    if len(chatsList)<1:
+        return
+    for user, chats in zip(userList, chatsList):
+        for chat in chats:
+            msg=emojize('Поздравляем с днем рождения пользователя {} (@{})\nУра! :tada:'.format(user[2],user[1]))
+            bot.send_message(chat, msg, reply_markup=RplMrkup())
+        
 
-def MonthlyJob(bot, job):
-    pass
 
 def main():
     print('start program')
     conf=confData('botconf.ini','BOT')
 
-    updater=Updater(**conf.params)
+    updater=Updater(conf.params['token'])
     dp=updater.dispatcher
     jq=updater.job_queue
 
@@ -75,14 +91,14 @@ def main():
     dp.add_handler(CommandHandler('start', start),1)
     dp.add_handler(CommandHandler('help', help),1)
     dp.add_handler(CommandHandler('bday', setBDay, pass_args=True),1)
+    dp.add_handler(CommandHandler('get', getBDay, pass_args=True),1)
     print('handlers added')
 
     dJob=jq.run_repeating(DaylyJob, DayInterval(), FirstDay())
-    mJob=jq.run_once(MonthlyJob, NextMonth())
     print('jobs added')
 
     updater.start_polling()
     updater.idle()
-    print('-1')
+    print('exit program')
 
 main()
