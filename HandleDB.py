@@ -72,8 +72,8 @@ class DB(object):
 
     def GetUserBDayList(self):
         now=datetime.datetime.now()
-        self.__curs.execute('select uid, uuname, uname from usr where bd={0:d} and bm={1:d} and by={2:d}' \
-                            .format(now.day, now.month, now.year))
+        self.__curs.execute('select uid, uuname, uname from usr where bd={0:d} and bm={1:d}' \
+                            .format(now.day, now.month))
         return self.__curs.fetchall()
 
     def GetChatsList(self,userList):
