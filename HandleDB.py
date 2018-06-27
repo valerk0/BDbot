@@ -65,7 +65,7 @@ class DB(object):
         with self.__conn as conn:
             with conn.cursor() as curs:
                 curs.execute('''
-                    select * from usr where uuname='{0:s};
+                    select * from usr where uuname='{0:s}';
                 '''.format(UN))
                 rows=curs.fetchall()
 
