@@ -53,18 +53,21 @@ class DB(object):
                 '''.format(bday.uid))
                 isexist=curs.fetchall()
 
-        if isexist.__len__()>0:
-            with self.__conn as conn:
-                with conn.cursor() as curs:
-                    curs.execute('''
-                        update usr set bd={0:d}, bm={1:d}, by={2:d} where uid={3:d};
-                    '''.format(bday.bd, bday.bm, bday.by, bday.uid))
-        else:
-            with self.__conn as conn:
-                with conn.cursor() as curs:
-                    curs.execute('''
-                        insert into usr values ({0:d}, '{1:s}', '{2:s}', {3:d}, {4:d}, {5:d});
-                    '''.format(bday.uid, bday.uuname, bday.uname, bday.bd, bday.bm, bday.by))
+        try:
+            if isexist.__len__()>0:
+                with self.__conn as conn:
+                    with conn.cursor() as curs:
+                        curs.execute('''
+                            update usr set bd={0:d}, bm={1:d}, by={2:d} where uid={3:d};
+                        '''.format(bday.bd, bday.bm, bday.by, bday.uid))
+            else:
+                with self.__conn as conn:
+                    with conn.cursor() as curs:
+                        curs.execute('''
+                            insert into usr values ({0:d}, '{1:s}', '{2:s}', {3:d}, {4:d}, {5:d});
+                        '''.format(bday.uid, bday.uuname, bday.uname, bday.bd, bday.bm, bday.by))
+        except:
+            pass
 
 
     def getDateByUN(self, UN):
