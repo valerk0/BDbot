@@ -43,6 +43,7 @@ def setBDay(bot, update, args):
 def getBDay(bot,update,args):
     try:
         UN=args[0].split('@')[1]
+        print(UN)
     except:
         update.message.reply_text('''
             Неверный формат запроса!
