@@ -17,29 +17,32 @@ class DB(object):
         usr=upd.effective_user
         cht=upd.effective_chat
 
-        with self.__conn as conn:
-            with conn.cursor() as curs:
-                print('''
-                    insert into usr values ({0:d}, '{1:s}', '{2:s}');
-                '''.format(usr.id, usr.username.strip(), usr.first_name.strip()))
-                curs.execute('''
-                    insert into usr values ({0:d}, '{1:s}', '{2:s}');
-                '''.format(usr.id, usr.username.strip(), usr.first_name.strip()))
-        print('tst')
+        try:
+            with self.__conn as conn:
+                with conn.cursor() as curs:
+                    curs.execute('''
+                        insert into usr values ({0:d}, '{1:s}', '{2:s}');
+                    '''.format(usr.id, usr.username.strip(), usr.first_name.strip()))
+        except:
+            pass
+
         if cht.id==usr.id:
             return
 
-        with self.__conn as conn:
-            with conn.cursor() as curs:
-                curs.execute('''
-                    insert into cht values ({0:d}, '{1:s}');
-                '''.format(cht.id, cht.title.strip()))
+        try:
+            with self.__conn as conn:
+                with conn.cursor() as curs:
+                    curs.execute('''
+                        insert into cht values ({0:d}, '{1:s}');
+                    '''.format(cht.id, cht.title.strip()))
 
-        with self.__conn as conn:
-            with conn.cursor() as curs:
-                curs.execute('''
-                    insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
-                '''.format(cht.id, usr.id, cht.id, usr.id))
+            with self.__conn as conn:
+                with conn.cursor() as curs:
+                    curs.execute('''
+                        insert into chtusr values ('{0:d}_{1:d}', {2:d}, {3:d});
+                    '''.format(cht.id, usr.id, cht.id, usr.id))
+        except:
+            pass
 
 
     def SaveBDay(self, bday):
