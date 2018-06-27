@@ -25,7 +25,7 @@ class DB(object):
                 curs.execute('''
                     insert into usr values ({0:d}, '{1:s}', '{2:s}');
                 '''.format(usr.id, usr.username.strip(), usr.first_name.strip()))
-
+        print('tst')
         if cht.id==usr.id:
             return
 
