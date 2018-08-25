@@ -3,9 +3,10 @@ __author__ = 'Valery'
 class BDayObj(object):
 
     def __init__(self, usr):
-        self.uid=usr.id
-        self.uuname=usr.username
-        self.uname=usr.first_name
+        self.id=usr.id
+        self.uname=usr.username
+        self.name=usr.first_name
+        self.lname=usr.last_name
 
     def SetDate(self, command):
         FullDate=command.split('.')

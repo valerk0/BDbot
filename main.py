@@ -2,7 +2,8 @@ __author__ = 'Valery'
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from confData import confData
 from helpers import private, RplMrkup, DayInterval, FirstDay
-from HandleDB import DB
+from HandleORM import DB
+# from HandleDB import DB
 from BDayObj import BDayObj
 from emoji import emojize
 from datetime import datetime, date
@@ -64,19 +65,27 @@ def ProcessMsg(bot, update):
     db.HandleMsg(update)
     print('updated/save data of @', update.effective_user.username, ' for chat ', update.effective_chat.title)
 
+# def DaylyJob(bot, job):
+#     db=DB()
+#     userList=db.GetUserBDayList()
+#     if len(userList)<1:
+#         return
+#     chatsList=db.GetChatsList(userList)
+#     if len(chatsList)<1:
+#         return
+#     for user, chats in zip(userList, chatsList):
+#         for chat in chats:
+#             msg=emojize('Поздравляем с днем рождения пользователя {} (@{})\nУра! :bouquet:'.format(user[2],user[1]))
+#             bot.send_message(chat, msg, reply_markup=RplMrkup())
+
 def DaylyJob(bot, job):
     db=DB()
-    userList=db.GetUserBDayList()
-    if len(userList)<1:
-        return
-    chatsList=db.GetChatsList(userList)
-    if len(chatsList)<1:
-        return
-    for user, chats in zip(userList, chatsList):
-        for chat in chats:
-            msg=emojize('Поздравляем с днем рождения пользователя {} (@{})\nУра! :bouquet:'.format(user[2],user[1]))
-            bot.send_message(chat, msg, reply_markup=RplMrkup())
-        
+    usersList=db.getUsersBDay()
+    for usr in usersList:
+        for cht in usr.chat:
+            msg=emojize('Поздравляем с днем рождения пользователя {} {} (@{})\nУра! :bouquet:'
+                        .format(usr.name, usr.lname, usr.uname))
+            bot.send_message(cht.id, msg, reply_markup=RplMrkup())
 
 
 def main():

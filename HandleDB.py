@@ -2,6 +2,7 @@ __author__ = 'Valery'
 
 import psycopg2, datetime, threading
 from confData import confData
+from datetime import datetime
 
 class DB(object):
 
@@ -52,7 +53,7 @@ class DB(object):
                 with conn.cursor() as curs:
                     curs.execute('''
                         select uid from usr where uid={0:d};
-                    '''.format(bday.uid))
+                    '''.format(bday.id))
                     isexist=curs.fetchall()
 
             try:
@@ -61,13 +62,13 @@ class DB(object):
                         with conn.cursor() as curs:
                             curs.execute('''
                                 update usr set bd={0:d}, bm={1:d}, by={2:d} where uid={3:d};
-                            '''.format(bday.bd, bday.bm, bday.by, bday.uid))
+                            '''.format(bday.bd, bday.bm, bday.by, bday.id))
                 else:
                     with self.__conn as conn:
                         with conn.cursor() as curs:
                             curs.execute('''
                                 insert into usr values ({0:d}, '{1:s}', '{2:s}', {3:d}, {4:d}, {5:d});
-                            '''.format(bday.uid, bday.uuname, bday.uname, bday.bd, bday.bm, bday.by))
+                            '''.format(bday.id, bday.uname, bday.name, bday.bd, bday.bm, bday.by))
             except:
                 pass
 
@@ -97,7 +98,7 @@ class DB(object):
                 with conn.cursor() as curs:
                     curs.execute('''
                         select uid, uuname, uname from usr where bd={0:d} and bm={1:d};
-                    '''.format(now.day, now.month))
+                    '''.format(datetime.now().day, datetime.now().month))
                     return curs.fetchall()
 
 
