@@ -27,7 +27,7 @@ class DB(object):
         ef_usr=upd.effective_user
         ef_cht=upd.effective_chat
         usr=User(id=ef_usr.id, name=ef_usr.first_name, lname=ef_usr.last_name, uname=ef_usr.username)
-        cht=Chat(id=ef_cht.id, name=ef_cht.title) 
+        cht=Chat(id=ef_cht.id, name=ef_cht.title)
         
         if not (s.query(User).filter(User.id==usr.id).first() and s.query(Chat).filter(Chat.id==cht.id).first() \
             and s.query(UserChat).filter(UserChat.user_id==usr.id, UserChat.chat_id==cht.id).first()):
@@ -56,7 +56,7 @@ class DB(object):
         print('start save')
         usr=User(id=bday.id, name=bday.name, lname=bday.lname, uname=bday.uname)
         print('user+')
-        bd=BirthDay(id=bday.id, by=bday.by, bm=bday.bm, bd=bday.bd)
+        bd=BirthDay(user_id=bday.id, by=bday.by, bm=bday.bm, bd=bday.bd)
         print('prepare')
         usr.bday.append(bd)
         print('append')
