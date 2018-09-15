@@ -87,6 +87,8 @@ def DaylyJob(bot, job):
             print(cht.name)
             uname=usr.name if not usr.name=='None' else ''
             ulname=usr.lname if not usr.name=='None' else ''
+            print(ulname==None)
+            print(ulname=='None')
             uuname='(@' + usr.uname + ')' if not usr.name=='None' else ''
             msg=emojize('Поздравляем с днем рождения пользователя {} {} {}\nУра! :bouquet:'
                         .format(uname, ulname, uuname))
