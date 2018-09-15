@@ -26,7 +26,7 @@ class DB(object):
         
         ef_usr=upd.effective_user
         ef_cht=upd.effective_chat
-        usr=User(id=ef_usr.id, name=ef_usr.first_name, sname=ef_usr.last_name, uname=ef_usr.username)
+        usr=User(id=ef_usr.id, name=ef_usr.first_name, lname=ef_usr.last_name, uname=ef_usr.username)
         cht=Chat(id=ef_cht.id, name=ef_cht.title)
         
         if not (s.query(User).filter(User.id==usr.id).first() and s.query(Chat).filter(Chat.id==cht.id).first() \
@@ -54,23 +54,19 @@ class DB(object):
     def SaveBDay(self, bday):
         s=self.s
         print('start save')
-        usr=User(id=bday.id, name=bday.name, sname=bday.lname, uname=bday.uname)
+        usr=User(id=bday.id, name=bday.name, lname=bday.lname, uname=bday.uname)
         print('user+')
-        bd=BirthDay(id=bday.id, by=bday.by,bm=bday.bm,bd=bday.bd)
+        bd=BirthDay(id=bday.id, by=bday.by, bm=bday.bm, bd=bday.bd)
         print('prepare')
         usr.bday.append(bd)
         print('append')
 
         if s.query(User).filter(User.id==usr.id).first():
-            print('1')
             for x in s.query(User).filter(User.id==usr.id).first().chat:
                 usr.chat.append(x)
-                print('2')
             s.merge(usr)
-            print('3')
         else:
             s.add(usr)
-            print('4')
 
         s.commit()
 
