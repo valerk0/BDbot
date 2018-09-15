@@ -35,9 +35,7 @@ def setBDay(bot, update, args):
             ''')
         return
     bday=BDayObj(update.message.from_user)
-    print('1')
     bday.SetDate(args[0])
-    print('2')
     db=DB()
     db.SaveBDay(bday)
     print('3')
