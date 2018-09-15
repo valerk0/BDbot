@@ -35,9 +35,12 @@ def setBDay(bot, update, args):
             ''')
         return
     bday=BDayObj(update.message.from_user)
+    print('1')
     bday.SetDate(args[0])
+    print('2')
     db=DB()
     db.SaveBDay(bday)
+    print('3')
     update.message.reply_text('''Сохранил Вашу дату рождения ({}) '''.format(args[0]))
     print('saved bday ', args[0], ' of user @', update.message.from_user.username)
 
