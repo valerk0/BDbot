@@ -5,13 +5,17 @@ from sqlalchemy.orm import relationship, backref
 Base=declarative_base()
 
 class User(Base):
+    print('u1')
     __tablename__='tuser'
+    print('u2')
     id=Column(BigInteger,primary_key=True)
+    print('u3')
     name=Column(String(250))
     lname=Column(String(250))
     uname=Column(String(250))
     chat=relationship('Chat',secondary='user_chat')
     bday=relationship('BirthDay')
+    print('u4')
 
 class Chat(Base):
     __tablename__='chat'

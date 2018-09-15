@@ -8,7 +8,6 @@ from model import Base, User, Chat, UserChat, BirthDay
 
 class DB(object):
     def __init__(self):
-        print('start init db')
         self.lock=threading.Lock()
         self.lock.acquire()
         DATABASE_URL='postgresql://postgres:12345@localhost/bddb'
@@ -17,7 +16,6 @@ class DB(object):
         session.configure(bind=engine)
         Base.metadata.create_all(engine)
         self.s=session()
-        print('end init db')
 
     def __del__(self):
         self.lock.release()
@@ -54,7 +52,6 @@ class DB(object):
 
 
     def SaveBDay(self, bday):
-        print('start save bd')
         s=self.s
         usr=User(id=bday.id, name=bday.name, sname=bday.lname, uname=bday.uname)
         bd=BirthDay(id=bday.id, by=bday.by,bm=bday.bm,bd=bday.bd)
