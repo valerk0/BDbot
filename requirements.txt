@@ -3,3 +3,4 @@ psycopg2
 configparser
 datetime
 emoji
+sqlalchemy
