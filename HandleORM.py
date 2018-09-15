@@ -27,7 +27,7 @@ class DB(object):
         ef_usr=upd.effective_user
         ef_cht=upd.effective_chat
         usr=User(id=ef_usr.id, name=ef_usr.first_name, lname=ef_usr.last_name, uname=ef_usr.username)
-        cht=Chat(id=ef_cht.id, name=ef_cht.title)
+        cht=Chat(id=ef_cht.id, name=ef_cht.first_name if ef_cht.type=='private' else ef_cht.title)
         
         if not (s.query(User).filter(User.id==usr.id).first() and s.query(Chat).filter(Chat.id==cht.id).first() \
             and s.query(UserChat).filter(UserChat.user_id==usr.id, UserChat.chat_id==cht.id).first()):
