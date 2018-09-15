@@ -85,9 +85,9 @@ def DaylyJob(bot, job):
         print(usr.name)
         for cht in usr.chat:
             print(cht.name)
-            uname=usr.name if usr.name else ''
-            ulname=usr.lname if usr.name else ''
-            uuname='(@' + usr.uname + ')' if usr.name else ''
+            uname=usr.name if not usr.name==None else ''
+            ulname=usr.lname if not usr.name==None else ''
+            uuname='(@' + usr.uname + ')' if not usr.name==None else ''
             msg=emojize('Поздравляем с днем рождения пользователя {} {} {}\nУра! :bouquet:'
                         .format(uname, ulname, uuname))
             bot.send_message(cht.id, msg, reply_markup=RplMrkup())

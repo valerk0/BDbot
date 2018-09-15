@@ -78,4 +78,4 @@ class DB(object):
 
     def getUsersBDay(self):
         s=self.s
-        return s.query(User).filter(BirthDay.bm==datetime.now().month,BirthDay.bd==datetime.now().day).all()
+        return s.query(User).join(User.bday).filter(BirthDay.bm==datetime.now().month,BirthDay.bd==datetime.now().day).all()
