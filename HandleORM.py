@@ -47,6 +47,11 @@ class DB(object):
                         cht.user.append(x)
                 usr.chat.append(cht)
                 s.merge(usr)
+        else:
+            if not s.query(User).filter(User.id==usr.id,User.name==usr.name,User.lname==usr.lname,User.uname==usr.uname).first():
+                for x in s.query(User).filter(User.id==usr.id).first().chat:
+                    usr.chat.append(x)
+                s.merge(usr)
         
         s.commit()
 
