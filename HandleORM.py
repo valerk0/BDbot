@@ -53,13 +53,9 @@ class DB(object):
 
     def SaveBDay(self, bday):
         s=self.s
-        print('start save')
         usr=User(id=bday.id, name=bday.name, lname=bday.lname, uname=bday.uname)
-        print('user+')
         bd=BirthDay(user_id=bday.id, by=bday.by, bm=bday.bm, bd=bday.bd)
-        print('prepare')
         usr.bday.append(bd)
-        print('append')
 
         if s.query(User).filter(User.id==usr.id).first():
             for x in s.query(User).filter(User.id==usr.id).first().chat:

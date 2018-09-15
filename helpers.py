@@ -23,7 +23,8 @@ def FirstDay():
     TargetTime=datetime.datetime(CurTime.year,CurTime.month,CurTime.day,6)
     if not CurTime.hour<6:
         TargetTime=TargetTime+datetime.timedelta(days=1)
-    return TargetTime-CurTime
+    return datetime.timedelta(minutes=1)
+    # return TargetTime-CurTime
 
 def NextMonth():
     CurTime=datetime.datetime.utcnow()
