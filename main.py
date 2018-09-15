@@ -82,9 +82,7 @@ def DaylyJob(bot, job):
     db=DB()
     usersList=db.getUsersBDay()
     for usr in usersList:
-        print(usr.name)
         for cht in usr.chat:
-            print(cht.name)
             uname=usr.name if not usr.name==None else ''
             ulname=usr.lname if not usr.lname==None else ''
             uuname='(@' + usr.uname + ')' if not usr.uname==None else ''
@@ -115,5 +113,4 @@ def main():
     updater.idle()
     print('exit program')
 
-print('before main')
 main()
