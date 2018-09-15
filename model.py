@@ -29,9 +29,13 @@ class UserChat(Base):
     chat_id=Column(BigInteger,ForeignKey('chat.id'),primary_key=True)
 
 class BirthDay(Base):
+    print('b1')
     __tablename__='birth_day'
+    print('b2')
     user_id=Column(BigInteger,ForeignKey('tuser.id'),primary_key=True)
+    print('b3')
     by=Column(Integer)
     bm=Column(Integer)
     bd=Column(Integer)
     user=relationship('User')
+    print('b4')

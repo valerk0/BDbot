@@ -53,7 +53,9 @@ class DB(object):
 
     def SaveBDay(self, bday):
         s=self.s
+        print('start save')
         usr=User(id=bday.id, name=bday.name, sname=bday.lname, uname=bday.uname)
+        print('user+')
         bd=BirthDay(id=bday.id, by=bday.by,bm=bday.bm,bd=bday.bd)
         print('prepare')
         usr.bday.append(bd)
