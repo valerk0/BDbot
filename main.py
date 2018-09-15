@@ -110,4 +110,5 @@ def main():
     updater.idle()
     print('exit program')
 
+print('before main')
 main()
