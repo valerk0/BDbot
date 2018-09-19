@@ -1,6 +1,6 @@
 import threading
 from confData import confData
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 from datetime import date, datetime
 import os
@@ -84,3 +84,27 @@ class DB(object):
     def getUsersBDay(self):
         s=self.s
         return s.query(User).join(User.bday).filter(BirthDay.bm==datetime.now().month,BirthDay.bd==datetime.now().day).all()
+
+
+    def delBDay(upd):
+        s=self.s
+        bd=s.query(BirthDay).filter(BirthDay.user_id==upd.effective_user.id)
+        if bd.first():
+            bd.delete()
+            s.commit()
+            return True
+        return False
+
+
+    def get10(upd):
+        s=self.s
+        curChat=select([User.id]).where(User.chat.any(Chat.id==upd.effective_chat.id))
+        users=s.query(User).filter(User.id.in_(curChat)).join(User.bday).order_by(BirthDay.bm,BirthDay.bd).all()
+        if users:
+            l=[]
+            curd=datetime.now().day
+            curm=datetime.now().month
+            for usr in users:
+                l.append([usr.bday[0].bd+100*(usr.bday[0].bm+(0 if (usr.bday[0].bm>=curm and usr.bday[0].bd>=curd) else 12)),x])
+            return sorted(l)[:10]
+        return False

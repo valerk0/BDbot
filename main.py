@@ -13,14 +13,18 @@ def start(bot, update):
     update.message.reply_text('Пожалуйста, задайте дату рождения в формате:\n/bday dd.mm.yyyy')
     print('start')
 
-@private
+# @private
 def help(bot, update):
     update.message.reply_text(emojize('''
         Бот поздравит Вас с днем рождения:bouquet: в чатах, которых вы состоите.
-        \n\nПожалуйста, задайте дату рождения в формате:
+        \nПожалуйста, задайте дату рождения в формате:
         \n/bday dd.mm.yyyy
-        \n\nПосмотреть чью-либо дату рождения можно командой:
+        \n\nПосмотреть чью-либо дату рождения:
         \n/get @username
+        \nПосмотреть ближайшие дни рождения участников чата (максимум 10):
+        \n/get10 
+        \nУдалить дату рождения из базы (только в личке):
+        \n/del
         '''))
     print('help')
 
@@ -28,17 +32,17 @@ def setBDay(bot, update, args):
     try:
         datetime.strptime(args[0],'%d.%m.%Y')
     except:
-        update.message.reply_text('''
-            Неверный формат даты!
+        update.message.reply_text(emojize('''
+            :no_entry_sign: Неверный формат даты!
             \nПравильный формат:
             \n/bday dd.mm.yyyy
-            ''')
+            '''))
         return
     bday=BDayObj(update.message.from_user)
     bday.SetDate(args[0])
     db=DB()
     db.SaveBDay(bday)
-    update.message.reply_text('''Сохранил Вашу дату рождения ({}) '''.format(args[0]))
+    update.message.reply_text(emojize(''':memo: Сохранил Вашу дату рождения ({}) '''.format(args[0])))
     print('saved bday ', args[0], ' of user @', update.message.from_user.username)
 
 def getBDay(bot,update,args):
@@ -46,19 +50,45 @@ def getBDay(bot,update,args):
         UN=args[0].split('@')[1]
         print(UN)
     except:
-        update.message.reply_text('''
-            Неверный формат запроса!
+        update.message.reply_text(emojize('''
+            :no_entry_sign: Неверный формат запроса!
             \nПравильный формат:
             \n/get @username
-            ''')
+            '''))
         return
     db=DB()
     bday=db.getDateByUN(UN)
     if isinstance(bday,(date,datetime)):
-        update.message.reply_text('Дата рождения пользователя @{} - {}'.format(UN,bday.strftime('%d.%m.%Y')), reply_markup=RplMrkup())
+        update.message.reply_text(emojize('Дата рождения пользователя @{} - :date: {}'.
+        	format(UN,bday.strftime('%d.%m.%Y'))), reply_markup=RplMrkup())
     else:
-        update.message.reply_text('Мне неизвестна дата рождения пользователя @{}'.format(UN), reply_markup=RplMrkup())
+        update.message.reply_text(emojize('Мне неизвестна дата рождения пользователя @{} :no_mouth:'.
+        	format(UN)), reply_markup=RplMrkup())
     print('showed bday: @{} - {}'.format(UN,bday))    
+
+def get10(bot,update):
+	db=DB()
+	usrs=db.get10(update)
+	if usrs:
+		txt='Ближайшие дни рождения:\n'
+		for n,x in usrs:
+			txt=txt+'{}.{} - {} {} {}\n'.
+			format(x.bday[0].bd, x.bday[0].bm, x.name, x.lname if x.lname else '', '(@'+x.uname+')' if x.uname else '')
+	else:
+		txt=emojize('У меня нет данных о днях рождениях пользователей этого чата :pensive:')
+	update.message.reply_text(txt, reply_markup=RplMrkup())
+	print(txt)
+
+@private
+def delBDay(bot, update):
+    db=DB()
+    if db.delBDay(update):
+    	update.message.reply_text(emojize('Дата рождения пользователя @{} удалена из базы :pensive:'.
+    		format(update.effective_user.username)))
+    else:
+    	update.message.reply_text(emojize('Пользователь @{} не записан в базу :no_mouth:'.
+    		format(update.effective_user.username)))
+    print('del @{}'.format(update.effective_user.username))
 
 def ProcessMsg(bot, update):
     db=DB()
@@ -104,6 +134,8 @@ def main():
     dp.add_handler(CommandHandler('help', help),1)
     dp.add_handler(CommandHandler('bday', setBDay, pass_args=True),1)
     dp.add_handler(CommandHandler('get', getBDay, pass_args=True),1)
+    dp.add_handler(CommandHandler('get10', get10),1)
+    dp.add_handler(CommandHandler('del', delBDay),1)
     print('handlers added')
 
     dJob=jq.run_repeating(DaylyJob, DayInterval(), FirstDay())
