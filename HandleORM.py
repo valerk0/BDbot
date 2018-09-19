@@ -86,7 +86,7 @@ class DB(object):
         return s.query(User).join(User.bday).filter(BirthDay.bm==datetime.now().month,BirthDay.bd==datetime.now().day).all()
 
 
-    def delBDay(upd):
+    def delBDay(self,upd):
         s=self.s
         bd=s.query(BirthDay).filter(BirthDay.user_id==upd.effective_user.id)
         if bd.first():
@@ -96,7 +96,7 @@ class DB(object):
         return False
 
 
-    def get10(upd):
+    def get10(self,upd):
         s=self.s
         curChat=select([User.id]).where(User.chat.any(Chat.id==upd.effective_chat.id))
         users=s.query(User).filter(User.id.in_(curChat)).join(User.bday).order_by(BirthDay.bm,BirthDay.bd).all()
@@ -105,6 +105,6 @@ class DB(object):
             curd=datetime.now().day
             curm=datetime.now().month
             for usr in users:
-                l.append([usr.bday[0].bd+100*(usr.bday[0].bm+(0 if (usr.bday[0].bm>=curm and usr.bday[0].bd>=curd) else 12)),x])
+                l.append([usr.bday[0].bd+100*(usr.bday[0].bm+(0 if (usr.bday[0].bm>=curm and usr.bday[0].bd>=curd) else 12)),usr])
             return sorted(l)[:10]
         return False
