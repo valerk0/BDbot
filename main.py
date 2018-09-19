@@ -33,7 +33,7 @@ def setBDay(bot, update, args):
         datetime.strptime(args[0],'%d.%m.%Y')
     except:
         update.message.reply_text(emojize('''
-            :no_entry_sign: Неверный формат даты!
+            Неверный формат даты!
             \nПравильный формат:
             \n/bday dd.mm.yyyy
             '''))
@@ -59,10 +59,10 @@ def getBDay(bot,update,args):
     db=DB()
     bday=db.getDateByUN(UN)
     if isinstance(bday,(date,datetime)):
-        update.message.reply_text(emojize('Дата рождения пользователя @{} - :date: {}'.
+        update.message.reply_text(emojize('Дата рождения пользователя @{} - {}'.
         	format(UN,bday.strftime('%d.%m.%Y'))), reply_markup=RplMrkup())
     else:
-        update.message.reply_text(emojize('Мне неизвестна дата рождения пользователя @{} :no_mouth:'.
+        update.message.reply_text(emojize('Мне неизвестна дата рождения пользователя @{}'.
         	format(UN)), reply_markup=RplMrkup())
     print('showed bday: @{} - {}'.format(UN,bday))    
 
@@ -75,7 +75,7 @@ def get10(bot,update):
 			txt=txt+'{}.{} - {} {} {}\n'.\
                 format(x.bday[0].bd, x.bday[0].bm, x.name, x.lname if x.lname else '', '(@'+x.uname+')' if x.uname else '')
 	else:
-		txt=emojize('У меня нет данных о днях рождениях пользователей этого чата :pensive:')
+		txt=emojize('У меня нет данных о днях рождениях пользователей этого чата')
 	update.message.reply_text(txt, reply_markup=RplMrkup())
 	print(txt)
 
@@ -83,10 +83,10 @@ def get10(bot,update):
 def delBDay(bot, update):
     db=DB()
     if db.delBDay(update):
-    	update.message.reply_text(emojize('Дата рождения пользователя @{} удалена из базы :pensive face:'.
+    	update.message.reply_text(emojize('Дата рождения пользователя @{} удалена из базы'.
     		format(update.effective_user.username)))
     else:
-    	update.message.reply_text(emojize('Пользователь @{} не записан в базу :no_mouth:'.
+    	update.message.reply_text(emojize('Пользователь @{} не записан в базу'.
     		format(update.effective_user.username)))
     print('del @{}'.format(update.effective_user.username))
 
