@@ -83,7 +83,7 @@ def get10(bot,update):
 def delBDay(bot, update):
     db=DB()
     if db.delBDay(update):
-    	update.message.reply_text(emojize('Дата рождения пользователя @{} удалена из базы :pensive:'.
+    	update.message.reply_text(emojize('Дата рождения пользователя @{} удалена из базы :pensive face:'.
     		format(update.effective_user.username)))
     else:
     	update.message.reply_text(emojize('Пользователь @{} не записан в базу :no_mouth:'.
