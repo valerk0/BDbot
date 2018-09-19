@@ -105,6 +105,7 @@ class DB(object):
             curd=datetime.now().day
             curm=datetime.now().month
             for usr in users:
-                l.append([usr.bday[0].bd+100*(usr.bday[0].bm+(0 if (usr.bday[0].bm>=curm and usr.bday[0].bd>=curd) else 12)),usr])
+                l.append([usr.bday[0].bd+100*(usr.bday[0].bm+\
+                (0 if (usr.bday[0].bm>curm or (usr.bday[0].bm==curm and usr.bday[0].bd>=curd)) else 12)),usr])
             return sorted(l)[:10]
         return False
