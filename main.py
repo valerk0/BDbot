@@ -72,8 +72,8 @@ def get10(bot,update):
 	if usrs:
 		txt='Ближайшие дни рождения:\n'
 		for n,x in usrs:
-			txt=txt+'{}.{} - {} {} {}\n'.
-			format(x.bday[0].bd, x.bday[0].bm, x.name, x.lname if x.lname else '', '(@'+x.uname+')' if x.uname else '')
+			txt=txt+'{}.{} - {} {} {}\n'.\
+                format(x.bday[0].bd, x.bday[0].bm, x.name, x.lname if x.lname else '', '(@'+x.uname+')' if x.uname else '')
 	else:
 		txt=emojize('У меня нет данных о днях рождениях пользователей этого чата :pensive:')
 	update.message.reply_text(txt, reply_markup=RplMrkup())
