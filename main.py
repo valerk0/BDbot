@@ -72,12 +72,25 @@ def get10(bot,update):
 	if usrs:
 		txt='Ближайшие дни рождения:\n'
 		for n,x in usrs:
-			txt=txt+'{}.{} - {} {} {}\n'.\
-                format(x.bday[0].bd, x.bday[0].bm, x.name, x.lname if x.lname else '', '(@'+x.uname+')' if x.uname else '')
+			txt=txt+'{} - {} {} {}\n'.\
+                format(date(x.bday[0].by, x.bday[0].bm, x.bday[0].bd).strftime('%d.%m'), \
+                    x.name, x.lname if x.lname else '', '(@'+x.uname+')' if x.uname else '')
 	else:
 		txt=emojize('У меня нет данных о днях рождениях пользователей этого чата')
 	update.message.reply_text(txt, reply_markup=RplMrkup())
 	print(txt)
+
+def stat(bot,update):
+    db=DB()
+    sDic=db.stat(update)
+    update.message.reply_text(emojize('''Статистика чата "{}":
+        \nИзвестных пользователей чата: {}
+        \nИзвестных дней рождений чата: {}
+        \n\nВсего чатов: {}
+        \nВсего пользователей: {}
+        \nВсего дней рождений: {}'''.
+        format(update.effective_chat.title, sDic['chatUsers'], sDic['chatBDays'], sDic['allChats'], \
+            sDic['allUsers'], sDic['allBDays'])), reply_markup=RplMrkup())
 
 @private
 def delBDay(bot, update):
@@ -135,6 +148,7 @@ def main():
     dp.add_handler(CommandHandler('bday', setBDay, pass_args=True),1)
     dp.add_handler(CommandHandler('get', getBDay, pass_args=True),1)
     dp.add_handler(CommandHandler('get10', get10),1)
+    dp.add_handler(CommandHandler('stat', get10),1)
     dp.add_handler(CommandHandler('del', delBDay),1)
     print('handlers added')
 

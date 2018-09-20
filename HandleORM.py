@@ -109,3 +109,14 @@ class DB(object):
                 (0 if (usr.bday[0].bm>curm or (usr.bday[0].bm==curm and usr.bday[0].bd>=curd)) else 12)),usr])
             return sorted(l)[:10]
         return False
+
+
+    def stat(self,upd):
+    	s=self.s
+    	curChat=select([User.id]).where(User.chat.any(Chat.id==upd.effective_chat.id))
+    	chatUsers=s.query(User).filter(User.id.in_(curChat)).count()
+    	allUsers=s.query(User).count()
+    	allChats=s.query(Chat).filter(Chat.id<0).count()
+    	chatBDays=s.query(BirthDay).filter(BirthDay.user_id.in_(curChat)).count()
+    	allBDays=s.query(BirthDay).count()
+    	return {'allUsers':allUsers,'allChats':allChats,'allBDays':allBDays,'chatUsers':chatUsers,'chatBDays':chatBDays}
