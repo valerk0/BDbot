@@ -74,7 +74,7 @@ def get10(bot,update):
 		for n,x in usrs:
 			txt=txt+'{} - {} {} {}\n'.\
                 format(date(x.bday[0].by, x.bday[0].bm, x.bday[0].bd).strftime('%d.%m'), \
-                    x.name, x.lname if x.lname else '', '(@'+x.uname+')' if x.uname else '')
+                    x.name, x.lname if x.lname else '', '(@ '+x.uname+')' if x.uname else '')
 	else:
 		txt=emojize('У меня нет данных о днях рождениях пользователей этого чата')
 	update.message.reply_text(txt, reply_markup=RplMrkup())
