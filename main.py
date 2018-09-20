@@ -148,7 +148,7 @@ def main():
     dp.add_handler(CommandHandler('bday', setBDay, pass_args=True),1)
     dp.add_handler(CommandHandler('get', getBDay, pass_args=True),1)
     dp.add_handler(CommandHandler('get10', get10),1)
-    dp.add_handler(CommandHandler('stat', get10),1)
+    dp.add_handler(CommandHandler('stat', stat),1)
     dp.add_handler(CommandHandler('del', delBDay),1)
     print('handlers added')
 
