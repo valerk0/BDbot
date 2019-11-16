@@ -74,7 +74,8 @@ def get10(bot,update):
 	if usrs:
 		txt='Ближайшие дни рождения:\n'
 		for n,x in usrs:
-			bot.send_message(chat_id=update.effective_chat.id, text=x)
+			tx=f'{x.name if x.name else ""} {x.bday[0].by if (x.bday and x.bday[0]) else ""}'
+			bot.send_message(chat_id=update.effective_chat.id, text=tx)
 			txt=txt+'{} - {} {} {}\n'.\
                 format(date(x.bday[0].by, x.bday[0].bm, x.bday[0].bd).strftime('%d.%m'), \
                     x.name, x.lname if x.lname else '', '(@ '+x.uname+')' if x.uname else '')
