@@ -97,9 +97,8 @@ class DB(object):
         return False
 
 
-    def get10(self,upd, bot):
+    def get10(self,upd):
         s=self.s
-        bot.send_message(chat_id=upd.effective_user.id, text='enter db')
         curChat=select([User.id]).where(User.chat.any(Chat.id==upd.effective_chat.id))
         users=s.query(User).filter(User.id.in_(curChat)).join(User.bday).order_by(BirthDay.bm,BirthDay.bd).all()
         if users:
@@ -110,12 +109,8 @@ class DB(object):
                 u_key = (usr.bday[0].bd+100*(usr.bday[0].bm+
                          (0 if (usr.bday[0].bm>curm or 
                          (usr.bday[0].bm==curm and usr.bday[0].bd>=curd)) else 12)))
-                bot.send_message(chat_id=upd.effective_user.id, text=f'{u_key} {usr.name}')
                 l.append([u_key,usr])
-                sleep(1)
-            bot.send_message(chat_id=upd.effective_user.id, text='done all')
             l = sorted(l,key=lambda u: u[0])
-            bot.send_message(chat_id=upd.effective_user.id, text=f'sorted {len(l)}')
             return l[:10]
         return False
 
