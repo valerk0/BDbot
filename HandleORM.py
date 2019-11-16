@@ -114,7 +114,7 @@ class DB(object):
                 l.append([u_key,usr])
                 sleep(1)
             bot.send_message(chat_id=upd.effective_user.id, text='done all')
-            l = sorted(l)
+            l = sorted(l,key=lambda u: u[0])
             bot.send_message(chat_id=upd.effective_user.id, text=f'sorted {len(l)}')
             return l[:10]
         return False
