@@ -68,6 +68,7 @@ def getBDay(bot,update,args):
 
 def get10(bot,update):
 	db=DB()
+	bot.send_message(chat_id=update.effective_chat.id, text='get10')
 	usrs=db.get10(update)
 	if usrs:
 		txt='Ближайшие дни рождения:\n'
