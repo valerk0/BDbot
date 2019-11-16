@@ -107,11 +107,15 @@ class DB(object):
             curd=datetime.now().day
             curm=datetime.now().month
             for usr in users:
-                l.append([usr.bday[0].bd+100*(usr.bday[0].bm+\
-                (0 if (usr.bday[0].bm>curm or (usr.bday[0].bm==curm and usr.bday[0].bd>=curd)) else 12)),usr])
+                u_key = (usr.bday[0].bd+100*(usr.bday[0].bm+
+                         (0 if (usr.bday[0].bm>curm or 
+                         (usr.bday[0].bm==curm and usr.bday[0].bd>=curd)) else 12)))
+                bot.send_message(chat_id=upd.effective_user.id, text=f'{u_key} {usr.name}')
+                l.append([u_key,usr])
+                sleep(1)
             bot.send_message(chat_id=upd.effective_user.id, text='done all')
-            l = sorted(l, key=lambda u: u.bday[0].bm*100+u.bday[0].bd)
-            bot.send_message(chat_id=upd.effective_user.id, text='sorted')
+            l = sorted(l)
+            bot.send_message(chat_id=upd.effective_user.id, text=f'sorted {len(l)}')
             return l[:10]
         return False
 
