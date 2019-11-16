@@ -1,4 +1,5 @@
 import threading
+from time import sleep
 from confData import confData
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
@@ -112,6 +113,7 @@ class DB(object):
                 l.append([usr.bday[0].bd+100*(usr.bday[0].bm+\
                 (0 if (usr.bday[0].bm>curm or (usr.bday[0].bm==curm and usr.bday[0].bd>=curd)) else 12)),usr])
                 bot.send_message(chat_id=upd.effective_user.id, text='done')
+                sleep(1)
             bot.send_message(chat_id=upd.effective_user.id, text='done all')
             return sorted(l)[:10]
         return False
