@@ -98,10 +98,10 @@ class DB(object):
 
     def get10(self,upd, bot):
         s=self.s
-	bot.send_message(chat_id=upd.effective_user.id, text='enter db')
+        bot.send_message(chat_id=upd.effective_user.id, text='enter db')
         curChat=select([User.id]).where(User.chat.any(Chat.id==upd.effective_chat.id))
         users=s.query(User).filter(User.id.in_(curChat)).join(User.bday).order_by(BirthDay.bm,BirthDay.bd).all()
-	bot.send_message(chat_id=upd.effective_user.id, text='1')
+        bot.send_message(chat_id=upd.effective_user.id, text='1')
         if users:
             l=[]
             curd=datetime.now().day
