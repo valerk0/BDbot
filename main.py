@@ -70,10 +70,11 @@ def get10(bot,update):
 	db=DB()
 	bot.send_message(chat_id=update.effective_chat.id, text='get10')
 	usrs=db.get10(update)
-	bot.send_message(chat_id=update.effective_chat.id, text=usrs)
+	bot.send_message(chat_id=update.effective_chat.id, text='db')
 	if usrs:
 		txt='Ближайшие дни рождения:\n'
 		for n,x in usrs:
+			bot.send_message(chat_id=update.effective_chat.id, text=x)
 			txt=txt+'{} - {} {} {}\n'.\
                 format(date(x.bday[0].by, x.bday[0].bm, x.bday[0].bd).strftime('%d.%m'), \
                     x.name, x.lname if x.lname else '', '(@ '+x.uname+')' if x.uname else '')
