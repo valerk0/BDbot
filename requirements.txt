@@ -4,4 +4,3 @@ configparser
 datetime
 emoji
 sqlalchemy
-urllib
