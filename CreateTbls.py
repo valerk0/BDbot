@@ -1,10 +1,13 @@
 __author__ = 'Valery'
 
-import psycopg2
-from confData import confData
+import psycopg2, os
+from urllib.parse import urlparse
 
-conf=confData('dbconfig.ini','DATABASE')
-with psycopg2.connect(**conf.params) as conn:
+db_config = urlparse(os.environ['DATABASE_URL'])
+with psycopg2.connect(user=db_config.username,
+                      password=db_config.password,
+                      database=db_config.path[1:],
+                      host=db_config.hostname) as conn:
     curs=conn.cursor()
     curs.execute('''
         create table cht (

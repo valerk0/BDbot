@@ -1,6 +1,5 @@
 import threading
 from time import sleep
-from confData import confData
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 from datetime import date, datetime
@@ -11,8 +10,7 @@ class DB(object):
     def __init__(self):
         self.lock=threading.Lock()
         self.lock.acquire()
-        DATABASE_URL='postgresql://postgres:12345@localhost/bddb'
-        engine=create_engine(os.environ.get('DATABASE_URL') or DATABASE_URL or 'sqlite:///')
+        engine=create_engine(os.environ['DATABASE_URL'])
         session=sessionmaker()
         session.configure(bind=engine)
         Base.metadata.create_all(engine)

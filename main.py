@@ -1,12 +1,12 @@
 __author__ = 'Valery'
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from confData import confData
 from helpers import private, RplMrkup, DayInterval, FirstDay
 from HandleORM import DB
 # from HandleDB import DB
 from BDayObj import BDayObj
 from emoji import emojize
 from datetime import datetime, date
+import os
 
 @private
 def start(bot, update):
@@ -137,9 +137,8 @@ def DaylyJob(bot, job):
 
 def main():
     print('start program')
-    conf=confData('botconf.ini','BOT')
 
-    updater=Updater(conf.params['token'])
+    updater=Updater(os.environ['TOKEN'])
     dp=updater.dispatcher
     jq=updater.job_queue
 

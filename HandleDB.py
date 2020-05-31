@@ -1,14 +1,18 @@
 __author__ = 'Valery'
 
 import psycopg2, datetime, threading
-from confData import confData
 from datetime import datetime
+from urllib.parse import urlparse
+import os
 
 class DB(object):
 
     def __init__(self):
-        conf=confData('dbconfig.ini','DATABASE')
-        self.__conn=psycopg2.connect(**conf.params)
+        db_config = urlparse(os.environ['DATABASE_URL'])
+        self.__conn=psycopg2.connect(user=db_config.username,
+                                     password=db_config.password,
+                                     database=db_config.path[1:],
+                                     host=db_config.hostname)
 
     def __del__(self):
         self.__conn.close()

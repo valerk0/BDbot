@@ -1,6 +1,5 @@
 __author__ = 'Valery'
-from confData import confData
-import telegram, datetime
+import telegram, datetime, os
 
 def private(func):
     def wrapped(bot,update, *args, **kwargs):
@@ -10,8 +9,8 @@ def private(func):
     return wrapped
 
 def RplMrkup():
-    conf=confData('botconf.ini','BOT')
-    BT=telegram.InlineKeyboardButton('Задать дату рождения',url='https://t.me/{0:s}?start'.format(conf.params['username']))
+    BT=telegram.InlineKeyboardButton('Задать дату рождения',
+        url='https://t.me/{0:s}?start'.format(os.environ['USERNAME']))
     RM=telegram.InlineKeyboardMarkup([[BT]])
     return RM
 
