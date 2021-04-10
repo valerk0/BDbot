@@ -16,6 +16,7 @@ def start(update, context):
 
 # @private
 def help(update, context):
+    print('help command')
     update.message.reply_text('''
         Бот поздравит Вас с днем рождения в чатах, которых вы состоите.
         \nПожалуйста, задайте дату рождения в формате:
@@ -30,6 +31,7 @@ def help(update, context):
     print('help')
  
 def setBDay(update, context):
+    print('setBDay command')
     args = context.args
     try:
         datetime.strptime(args[0],'%d.%m.%Y')
@@ -48,6 +50,7 @@ def setBDay(update, context):
     print('saved bday ', args[0], ' of user @', update.message.from_user.username)
  
 def getBDay(update, context):
+    print('getBDay command')
     args = context.args
     try:
         UN = args[0].split('@')[1]
@@ -70,6 +73,7 @@ def getBDay(update, context):
     print('showed bday: @{} - {}'.format(UN,bday))   
  
 def get10(update, context):
+    print('get10 command')
     db = DB()
     ordered_bdays = db.get_ordered_bdays()
     nodata_txt = 'У меня нет данных о днях рождениях пользователей этого чата \U0001F937'
@@ -102,6 +106,7 @@ def is_usr_in_cht(bot, usr_id, cht_id):
     return False
  
 def stat(update, context):
+    print('stat command')
     db = DB()
     sDic = db.stat()
     update.message.reply_text('''Всего чатов: {}
@@ -110,6 +115,7 @@ def stat(update, context):
  
 @private
 def delBDay(update, context):
+    print('delBDay command')
     db = DB()
     if db.del_bday(update):
         update.message.reply_text('Дата рождения пользователя @{} удалена из базы'.
