@@ -27,10 +27,10 @@ with psycopg2.connect(user=db_config.username,
         );
     ''')
 
-    curs.execute('''
-        create table chtusr (
-        cuid varchar(255) primary key,
-        cid bigint,
-        uid bigint
-        );
-    ''')
+    # curs.execute('''
+    #     create table chtusr (
+    #     cuid varchar(255) primary key,
+    #     cid bigint,
+    #     uid bigint
+    #     );
+    # ''')

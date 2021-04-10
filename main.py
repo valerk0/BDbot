@@ -1,162 +1,166 @@
 __author__ = 'Valery'
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from helpers import private, RplMrkup, DayInterval, FirstDay
-from HandleORM import DB
-# from HandleDB import DB
+#from HandleORM import DB
+from HandleDB import DB
 from BDayObj import BDayObj
-from emoji import emojize
 from datetime import datetime, date
 import os
+from random import randint
+ 
 
 @private
-def start(bot, update):
+def start(update, context):
     update.message.reply_text('Пожалуйста, задайте дату рождения в формате:\n/bday dd.mm.yyyy')
     print('start')
 
 # @private
-def help(bot, update):
-    update.message.reply_text(emojize('''
-        Бот поздравит Вас с днем рождения:bouquet: в чатах, которых вы состоите.
+def help(update, context):
+    update.message.reply_text('''
+        Бот поздравит Вас с днем рождения в чатах, которых вы состоите.
         \nПожалуйста, задайте дату рождения в формате:
         \n/bday dd.mm.yyyy
         \n\nПосмотреть чью-либо дату рождения:
         \n/get @username
         \nПосмотреть ближайшие дни рождения участников чата (максимум 10):
-        \n/get10 
+        \n/get10
         \nУдалить дату рождения из базы (только в личке):
         \n/del
-        '''))
+        ''')
     print('help')
-
-def setBDay(bot, update, args):
+ 
+def setBDay(update, context):
+    args = context.args
     try:
         datetime.strptime(args[0],'%d.%m.%Y')
     except:
-        update.message.reply_text(emojize('''
-            Неверный формат даты!
+        update.message.reply_text('''
+            \u26D4 Неверный формат даты!
             \nПравильный формат:
             \n/bday dd.mm.yyyy
-            '''))
+            ''')
         return
-    bday=BDayObj(update.message.from_user)
+    bday = BDayObj(update.message.from_user)
     bday.SetDate(args[0])
-    db=DB()
+    db = DB()
     db.SaveBDay(bday)
-    update.message.reply_text(emojize(''':memo: Сохранил Вашу дату рождения ({}) '''.format(args[0])))
+    update.message.reply_text('''\u270D Сохранил Вашу дату рождения ({}) '''.format(args[0]))
     print('saved bday ', args[0], ' of user @', update.message.from_user.username)
-
-def getBDay(bot,update,args):
+ 
+def getBDay(update, context):
+    args = context.args
     try:
-        UN=args[0].split('@')[1]
+        UN = args[0].split('@')[1]
         print(UN)
     except:
-        update.message.reply_text(emojize('''
-            :no_entry_sign: Неверный формат запроса!
+        update.message.reply_text('''
+            \u26D4 Неверный формат запроса!
             \nПравильный формат:
             \n/get @username
-            '''))
+            ''')
         return
-    db=DB()
-    bday=db.getDateByUN(UN)
+    db = DB()
+    bday = db.getDateByUN(UN)
     if isinstance(bday,(date,datetime)):
-        update.message.reply_text(emojize('Дата рождения пользователя @{} - {}'.
-        	format(UN,bday.strftime('%d.%m.%Y'))), reply_markup=RplMrkup())
+        update.message.reply_text('Дата рождения пользователя @{} - {}'.
+               format(UN,bday.strftime('%d.%m.%Y')), reply_markup=RplMrkup())
     else:
-        update.message.reply_text(emojize('Мне неизвестна дата рождения пользователя @{}'.
-        	format(UN)), reply_markup=RplMrkup())
-    print('showed bday: @{} - {}'.format(UN,bday))    
-
-def get10(bot,update):
-	db=DB()
-	usrs=db.get10(update)
-	if usrs:
-		txt='Ближайшие дни рождения:\n'
-		for n,x in usrs:
-			tx=f'{x.name if x.name else ""} {x.bday[0].by if (x.bday and x.bday[0]) else ""}'
-			txt=txt+'{} - {} {} {}\n'.\
-                format(date(x.bday[0].by, x.bday[0].bm, x.bday[0].bd).strftime('%d.%m'), \
-                    x.name, x.lname if x.lname else '', '(@ '+x.uname+')' if x.uname else '')
-	else:
-		txt=emojize('У меня нет данных о днях рождениях пользователей этого чата')
-	update.message.reply_text(txt, reply_markup=RplMrkup())
-	print(txt)
-
-def stat(bot,update):
-    db=DB()
-    sDic=db.stat(update)
-    update.message.reply_text(emojize('''Статистика чата "{}":
-        \nИзвестных пользователей чата: {}
-        \nИзвестных дней рождений чата: {}
-        \n\nВсего чатов: {}
-        \nВсего пользователей: {}
+        update.message.reply_text(('Мне неизвестна дата рождения пользователя @{} \U0001F937'.
+               format(UN)), reply_markup=RplMrkup())
+    print('showed bday: @{} - {}'.format(UN,bday))   
+ 
+def get10(update, context):
+    db = DB()
+    ordered_bdays = db.get_ordered_bdays()
+    nodata_txt = 'У меня нет данных о днях рождениях пользователей этого чата \U0001F937'
+    if ordered_bdays and ordered_bdays[0]:
+        cht_id = update.effective_chat.id
+        context.bot.send_chat_action(cht_id, 'typing')
+        cht_bdays = []
+        for usr_bday in ordered_bdays:
+            if is_usr_in_cht(context.bot, usr_bday[0], cht_id): cht_bdays.append(usr_bday)
+            if len(cht_bdays) >= 10: break
+        txt='\U0001F4DD Ближайшие дни рождения:\n'
+        for bday in cht_bdays:
+            txt = (txt + '{} - {} {}\n'.
+                format(date(bday[5], bday[4], bday[3]).strftime('%d.%m'), 
+                bday[2] if bday[2] else '', '(@ '+bday[1]+')' if bday[1] else ''))
+        if not cht_bdays:
+            txt = nodata_txt
+    else:
+        txt = nodata_txt
+    update.message.reply_text(txt, reply_markup=RplMrkup())
+    print(txt)
+ 
+def is_usr_in_cht(bot, usr_id, cht_id):
+    cht_member = None
+    try:
+        cht_member = bot.get_chat_member(cht_id, usr_id)
+    except:
+        return False
+    if cht_member and cht_member.status not in ['left', 'kicked']: return True
+    return False
+ 
+def stat(update, context):
+    db = DB()
+    sDic = db.stat()
+    update.message.reply_text('''Всего чатов: {}
         \nВсего дней рождений: {}'''.
-        format(update.effective_chat.title, sDic['chatUsers'], sDic['chatBDays'], sDic['allChats'], \
-            sDic['allUsers'], sDic['allBDays'])), reply_markup=RplMrkup())
-
+        format(sDic['allChats'], sDic['allBDays']), reply_markup=RplMrkup())
+ 
 @private
-def delBDay(bot, update):
-    db=DB()
-    if db.delBDay(update):
-    	update.message.reply_text(emojize('Дата рождения пользователя @{} удалена из базы'.
-    		format(update.effective_user.username)))
+def delBDay(update, context):
+    db = DB()
+    if db.del_bday(update):
+        update.message.reply_text('Дата рождения пользователя @{} удалена из базы'.
+                        format(update.effective_user.username))
     else:
-    	update.message.reply_text(emojize('Пользователь @{} не записан в базу'.
-    		format(update.effective_user.username)))
+        update.message.reply_text('Пользователь @{} не записан в базу'.
+                        format(update.effective_user.username))
     print('del @{}'.format(update.effective_user.username))
-
-def ProcessMsg(bot, update):
-    db=DB()
+ 
+def ProcessMsg(update, context):
+    db = DB()
     db.HandleMsg(update)
     print('updated/save data of @', update.effective_user.username, ' for chat ', update.effective_chat.title)
 
-# def DaylyJob(bot, job):
-#     db=DB()
-#     userList=db.GetUserBDayList()
-#     if len(userList)<1:
-#         return
-#     chatsList=db.GetChatsList(userList)
-#     if len(chatsList)<1:
-#         return
-#     for user, chats in zip(userList, chatsList):
-#         for chat in chats:
-#             msg=emojize('Поздравляем с днем рождения пользователя {} (@{})\nУра! :bouquet:'.format(user[2],user[1]))
-#             bot.send_message(chat, msg, reply_markup=RplMrkup())
-
-def DaylyJob(bot, job):
-    db=DB()
-    usersList=db.getUsersBDay()
-    for usr in usersList:
-        for cht in usr.chat:
-            uname=usr.name if not usr.name==None else ''
-            ulname=usr.lname if not usr.lname==None else ''
-            uuname='(@' + usr.uname + ')' if not usr.uname==None else ''
-            msg=emojize('Поздравляем с днем рождения пользователя {} {} {}\nУра! :bouquet:'
-                        .format(uname, ulname, uuname))
-            bot.send_message(cht.id, msg, reply_markup=RplMrkup())
-
+def DaylyJob(context):
+    bot = context.bot
+    db = DB()
+    usrsList = db.GetUserBDayList()
+    chtsList = db.GetChatsList()
+    emoji = ['\U0001F490', '\U0001F382', '\U0001F388', '\U0001F389', '\U0001F38A', '\U0001F381']
+    for usr in usrsList:
+        for cht in chtsList:
+            if not is_usr_in_cht(bot, usr[0], cht[0]): continue
+            uname = usr[2]
+            uuname = '(@' + usr[1] + ')' if usr[1] else ''
+            msg = ('Поздравляем с днем рождения пользователя {} {}\nУра! {}'
+                        .format(uname, uuname, emoji[randint(0, 5)]))
+            bot.send_message(cht[0], msg, reply_markup=RplMrkup())
 
 def main():
-    print('start program')
+    print('start program') 
 
-    updater=Updater(os.environ['TOKEN'])
-    dp=updater.dispatcher
-    jq=updater.job_queue
+    updater = Updater(os.environ['TOKEN'])
+    dp = updater.dispatcher
+    jq = updater.job_queue 
 
     dp.add_handler(MessageHandler(not Filters.status_update, ProcessMsg),0)
-    dp.add_handler(CommandHandler('start', start),1)
-    dp.add_handler(CommandHandler('help', help),1)
-    dp.add_handler(CommandHandler('bday', setBDay, pass_args=True),1)
-    dp.add_handler(CommandHandler('get', getBDay, pass_args=True),1)
-    dp.add_handler(CommandHandler('get10', get10),1)
-    dp.add_handler(CommandHandler('stat', stat),1)
-    dp.add_handler(CommandHandler('del', delBDay),1)
-    print('handlers added')
+    dp.add_handler(CommandHandler('start', start), 1)
+    dp.add_handler(CommandHandler('help', help), 1)
+    dp.add_handler(CommandHandler('bday', setBDay, pass_args=True), 1)
+    dp.add_handler(CommandHandler('get', getBDay, pass_args=True), 1)
+    dp.add_handler(CommandHandler('get10', get10), 1)
+    dp.add_handler(CommandHandler('stat', stat), 1)
+    dp.add_handler(CommandHandler('del', delBDay), 1)
+    print('handlers added') 
 
-    dJob=jq.run_repeating(DaylyJob, DayInterval(), FirstDay())
-    print('jobs added')
+    dJob = jq.run_repeating(DaylyJob, DayInterval(), FirstDay())
+    print('jobs added') 
 
     updater.start_polling()
     updater.idle()
-    print('exit program')
+    print('exit program') 
 
 main()
