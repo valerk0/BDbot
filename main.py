@@ -105,6 +105,15 @@ def is_usr_in_cht(bot, usr_id, cht_id):
     if cht_member and cht_member.status not in ['left', 'kicked']: return True
     return False
  
+def is_usr_not_in_cht(bot, usr_id, cht_id):
+    cht_member = None
+    try:
+        cht_member = bot.get_chat_member(cht_id, usr_id)
+    except:
+        return False
+    if cht_member and cht_member.status in ['left', 'kicked']: return True
+    return False
+ 
 def stat(update, context):
     print('stat command')
     db = DB()
@@ -136,6 +145,18 @@ def chatlist(update, context):
         txt += '\n{}: {}'.format(cht[0], cht[1])
     update.message.reply_text(txt)
 
+@admin
+def delleftchats(update, context):
+    print('delleftchats command')
+    del_left_chats(context)
+
+def del_left_chats(context):
+    db = DB()
+    chts = db.get_chat_list()
+    for cht in chts:
+        if is_usr_not_in_cht(context.bot, 607758927, cht[0]):
+            db.del_cht(cht[0])
+
 def ProcessMsg(update, context):
     db = DB()
     db.HandleMsg(update)
@@ -163,7 +184,7 @@ def main():
     dp = updater.dispatcher
     jq = updater.job_queue 
 
-    dp.add_handler(MessageHandler(not Filters.status_update, ProcessMsg),0)
+    dp.add_handler(MessageHandler(None, ProcessMsg),0)
     dp.add_handler(CommandHandler('start', start), 1)
     dp.add_handler(CommandHandler('help', help), 1)
     dp.add_handler(CommandHandler('bday', setBDay, pass_args=True), 1)
@@ -172,6 +193,7 @@ def main():
     dp.add_handler(CommandHandler('stat', stat), 1)
     dp.add_handler(CommandHandler('del', delBDay), 1)
     dp.add_handler(CommandHandler('chatlist', chatlist), 1)
+    dp.add_handler(CommandHandler('delleftchats', delleftchats), 1)
     print('handlers added') 
 
     dJob = jq.run_repeating(DaylyJob, DayInterval(), FirstDay())

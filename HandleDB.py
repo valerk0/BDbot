@@ -191,3 +191,12 @@ class DB(object):
                     ''')
                     chts = curs.fetchall()
         return chts
+
+    def del_cht(self, cht):
+        print('deleting chat {}'.format(cht))
+        with threading.Lock():
+            with self.__conn as conn:
+                with conn.cursor() as curs:
+                    curs.execute('''
+                        delete from cht where cid={};
+                    '''.format(cht))
