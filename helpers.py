@@ -8,6 +8,13 @@ def private(func):
         return
     return wrapped
 
+def admin(func):
+    def wrapped(update, context, *args, **kwargs):
+        if update.message.chat.id == 136652:
+            return func(update, context, *args, **kwargs)
+        return
+    return wrapped
+
 def RplMrkup():
     BT = telegram.InlineKeyboardButton('Задать дату рождения',
         url='https://t.me/{0:s}?start'.format(os.environ['USERNAME']))

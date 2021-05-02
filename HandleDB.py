@@ -180,3 +180,14 @@ class DB(object):
                         '''.format(upd.effective_user.id))
             return True
         return False
+
+    def get_chat_list(self):
+        chts = None
+        with threading.Lock():
+            with self.__conn as conn:
+                with conn.cursor() as curs:
+                    curs.execute('''
+                        select * from cht;
+                    ''')
+                    chts = curs.fetchall()
+        return chts

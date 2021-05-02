@@ -1,6 +1,6 @@
 __author__ = 'Valery'
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from helpers import private, RplMrkup, DayInterval, FirstDay
+from helpers import private, RplMrkup, DayInterval, FirstDay, admin
 #from HandleORM import DB
 from HandleDB import DB
 from BDayObj import BDayObj
@@ -125,6 +125,17 @@ def delBDay(update, context):
                         format(update.effective_user.username))
     print('del @{}'.format(update.effective_user.username))
  
+@admin
+def chatlist(update, context):
+    print('chatlist command')
+    db = DB()
+    chts = db.get_chat_list()
+    if not chts: return
+    txt = 'Количество чатов: {}'.format(len(chts))
+    for cht in chts:
+        txt += '\n{}: {}'.format(cht[0], cht[1])
+    update.message.reply_text(txt)
+
 def ProcessMsg(update, context):
     db = DB()
     db.HandleMsg(update)
@@ -160,6 +171,7 @@ def main():
     dp.add_handler(CommandHandler('get10', get10), 1)
     dp.add_handler(CommandHandler('stat', stat), 1)
     dp.add_handler(CommandHandler('del', delBDay), 1)
+    dp.add_handler(CommandHandler('chatlist', chatlist), 1)
     print('handlers added') 
 
     dJob = jq.run_repeating(DaylyJob, DayInterval(), FirstDay())
