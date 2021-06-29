@@ -45,7 +45,7 @@ class DB(object):
                             else:
                                 fulln = fname or lname
                             curs.execute('''
-                                update usr set uuname={1:d}, uname={2:d} where uid={0:d};
+                                update usr set uuname='{1:d}', uname='{2:d}' where uid={0:d};
                             '''.format(usr.id, usr.username.strip(), fulln))
             except:
                 pass 
