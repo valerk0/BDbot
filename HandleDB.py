@@ -39,13 +39,13 @@ class DB(object):
                     with self.__conn as conn:
                         with conn.cursor() as curs:
                             fname = usr.first_name.strip()
-                            lname = usr.first_name.strip()
+                            lname = usr.last_name.strip()
                             if fname and lname:
                                 fulln = '{} {}'.format(fname, lname)
                             else:
                                 fulln = fname or lname
                             curs.execute('''
-                                insert into usr values ({0:d}, '{1:s}', '{2:s}');
+                                update usr set uuname={1:d}, uname={2:d} where uid={0:d};
                             '''.format(usr.id, usr.username.strip(), fulln))
             except:
                 pass 
@@ -140,7 +140,9 @@ class DB(object):
                     userrows=curs.fetchall()
         i = 0
         for i,urow in enumerate(userrows):
-            if urow[3] >= curd and urow[4] >= curm: break
+            if  urow[4] * 100 + urow[3] >= curm * 100 + curd: 
+                print(urow[3], curd, urow[4], curm)
+                break
         ordered_bdays = []
         ordered_bdays = userrows[i:]
         if i > 0:

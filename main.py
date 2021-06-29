@@ -82,7 +82,8 @@ def get10(update, context):
         context.bot.send_chat_action(cht_id, 'typing')
         cht_bdays = []
         for usr_bday in ordered_bdays:
-            if is_usr_in_cht(context.bot, usr_bday[0], cht_id): cht_bdays.append(usr_bday)
+            if is_usr_in_cht(context.bot, usr_bday[0], cht_id): 
+                cht_bdays.append(usr_bday)
             if len(cht_bdays) >= 10: break
         txt='\U0001F4DD Ближайшие дни рождения:\n'
         for bday in cht_bdays:
