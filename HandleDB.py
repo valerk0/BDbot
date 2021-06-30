@@ -44,6 +44,7 @@ class DB(object):
                                 fulln = '{} {}'.format(fname, lname)
                             else:
                                 fulln = fname or lname
+                            print(usr.id, usr.username.strip(), fulln)
                             curs.execute('''
                                 update usr set uuname='{1:s}', uname='{2:s}' where uid={0:d};
                             '''.format(usr.id, usr.username.strip(), fulln))
